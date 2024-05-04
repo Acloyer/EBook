@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import config from "../../config";
 
 function LoginedUserNav({ user }) {
     const [genres, setGenres] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:6060/api/v1/genres")
+        axios.get(`${config.backApi}/genres`)
             .then(response => {
                 setGenres(response.data);
             })
@@ -51,10 +52,7 @@ function LoginedUserNav({ user }) {
                                     <a href="#" className="navbar-link">Genres</a>
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
                                         <li>{genres.map(genre => (
-                                                // <tr key={genre.id}>
-                                                    <a href="#" className="navbar-link">{genre.name}</a>
-                                                    // <td>{genre.name}</td>
-                                                // </tr>
+                                                <a href="#" className="navbar-link">{genre.name}</a>
                                             ))}
                                         </li>
                                     </ul>
@@ -71,8 +69,8 @@ function LoginedUserNav({ user }) {
                                     <img src="user.png" />
                                 </div>
                                 <div className="user-detail">
-                                    <h2>UserName LastName</h2>
-                                    <h3>gmail</h3>
+                                    <h2>FirstName LastName</h2>
+                                    <h3>testgmail@gmail.com</h3>
                                 </div>
                             </div>
                         </nav>

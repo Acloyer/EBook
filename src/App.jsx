@@ -8,7 +8,6 @@ import Home from './components/home_page/Home';
 import Book from './components/book_show_page/Book';
 import Favorite from './components/favorites_page/Favorite';
 import LoginedUserNav from './components/logined_user_navbar/LoginedUserNav';
-import Genres from './components/genres/Genres';
 
 function App() {
   return (
@@ -21,7 +20,6 @@ function App() {
         <Route path='/Favorite' element={<Favorite/>} />
         <Route path='/a' element={<Navbar/>} />
         <Route path='/aa' element={<LoginedUserNav/>} />
-        <Route path='/genres' element={<Genres/>} />
       </Routes>
     </BrowserRouter>
   );

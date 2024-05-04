@@ -1,7 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import config from "../../config";
 
 function Navbar() {
+    const [genres, setGenres] = useState([]);
+
+    useEffect(() => {
+        axios.get(`${config.backApi}/genres`)
+            .then(response => {
+                setGenres(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching genres:", error);
+            });
+    }, []);
     return (
         <>
             <div className="animate__animated animate__zoomInDown">
@@ -54,9 +68,9 @@ function Navbar() {
                                 <li>
                                     <a href="#" className="navbar-link">Genres</a>
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
-                                        <li><a href="#" className="dropdown-link">Fiction</a></li>
-                                        <li><a href="#" className="dropdown-link">Non-Fiction</a></li>
-                                        <li><a href="#" className="dropdown-link">Science Fiction</a></li>
+                                        {genres.map(genre => (
+                                            <a href="#" className="navbar-link">{genre.name}</a>
+                                        ))}
                                     </ul>
                                 </li>
 

@@ -12,6 +12,8 @@ function Header() {
         const refreshToken = localStorage.getItem("refreshToken");
 
         if (accessToken && refreshToken) {
+            console.log(accessToken);
+            console.log(refreshToken);
             setIsLoggedIn(true);
         } else {
             setIsLoggedIn(false);
@@ -20,7 +22,7 @@ function Header() {
 
     return (
         <>
-            {isLoggedIn ? <Navbar /> : <LoginedUserNav />}
+            {isLoggedIn ? <LoginedUserNav /> : <Navbar />} 
             <section className="section hero has-bg-image">
                 <div className="container">
                     <div className="animate__animated animate__zoomInLeft">
