@@ -25,7 +25,7 @@ function Navbar() {
 
     const fetchGenres = async () => {
         try {
-            const response = await axios.get("http://localhost:6060/api/v1/genres");
+            const response = await axios.get(`${config.backApi}/genres`);
             setGenres1(response.data);
         } catch (error) {
             console.error("Error fetching genres:", error);
@@ -71,7 +71,7 @@ function Navbar() {
                                 </li>
 
                                 <li>
-                                    <a href="#" className="navbar-link">Shop</a>
+                                    <a href="Shop" className="navbar-link">Shop</a>
                                 </li>
 
                                 <li>
@@ -85,7 +85,7 @@ function Navbar() {
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
                                         {genres.map(genre => (
                                             <li key={genre.id}>
-                                                <Link to={`http://localhost:6060/api/v1/books?PageSize=5&PageNumber=1&GenreId=${genre.id}`} className="navbar-link">{genre.name}</Link>
+                                                <Link to={`${config.frontendIP}/Shop?GenreId=${genre.id}`} className="navbar-link">{genre.name}</Link>
                                             </li>
                                         ))}
                                     </ul>
