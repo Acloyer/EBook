@@ -1,27 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../navbar/Navbar";
 import BookCard from "../book_show/BookCard";
 import Footer from "../footer/Footer";
+import axios from "axios";
 
 function Book() {
+    const [bookData, setBookData] = useState(null);
+
+    useEffect(() => {
+        const id = new URLSearchParams(window.location.search).get("id");
+        if (id) {
+            fetchBookData(id);
+        }
+    }, []);
+
+    const fetchBookData = async (id) => {
+        try {
+            const response = await axios.get(`http://localhost:6060/api/v1/books/${id}`);
+            setBookData(response.data);
+        } catch (error) {
+            console.error("Error fetching book data:", error);
+        }
+    };
+
     return (
         <>
             <Navbar />
-            <BookCard
-            imageSrc="book-4.png"
-            category="Action"
-            title="Some Book"
-            description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, possimus nostrum!"
-            author="Name Surname"
-            pagesNum="289"
-            price="12,99$"
-            copiesNum="200"
-            soldCopies="124"
-            language="English"
-            />
-            <Footer/>
+            {bookData && (
+                <BookCard
+                    imageSrc={bookData.posterUrl}
+                    category={bookData.genre.name}
+                    title={bookData.title}
+                    description={`Pages: ${bookData.pageCount}, Language: ${bookData.language.name}`}
+                    author={bookData.author.pseudonym}
+                    pagesNum={bookData.pageCount}
+                    price={`${bookData.price}$`}
+                    copiesNum={bookData.quantity}
+                    soldCopies={bookData.soldUnits}
+                    language={bookData.language.name}
+                />
+            )}
+            <Footer />
         </>
-    )
+    );
 }
 
 export default Book;

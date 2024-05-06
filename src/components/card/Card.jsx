@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Card({ imageSrc, category, title, description, price }) {
+function Card({ imageSrc, category, title, description, price, id }) {
     return (
         <div className="product-card">
             <div className="product-tumb">
-                <Link to="/BookView">
+                <Link to={`/BookView?id=${id}`}>
                     <img src={imageSrc} alt={title} />
                 </Link>
             </div>
             <div className="product-details">
                 <span className="product-catagory">{category}</span>
-                <Link to="/BookView">
-                    <h4><a href="">{title}</a></h4>
+                <Link to={`/BookView?id=${id}`}>
+                    <h4>{title}</h4>
                 </Link>
                 <p>{description}</p>
                 <div className="product-bottom-details">
@@ -28,6 +28,7 @@ function Card({ imageSrc, category, title, description, price }) {
 }
 
 export default Card;
+
 
 
 // import React from "react";

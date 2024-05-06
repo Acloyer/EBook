@@ -4,9 +4,9 @@ function BookCard({ imageSrc, category, title, description, price, author, pages
     return (
         <div className="container">
             <div className="book-section animate__animated animate__zoomInUp">
-                <div className="book-cover">
+                {/* <div className="book-cover"> */}
                     <img src={imageSrc} alt="Book Cover" />
-                </div>
+                {/* </div> */}
                 <div className="book-info text-center">
                     <h1>"{title}"</h1>
                     <p>Genre: {category}</p>

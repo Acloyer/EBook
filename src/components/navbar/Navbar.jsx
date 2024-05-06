@@ -16,6 +16,21 @@ function Navbar() {
                 console.error("Error fetching genres:", error);
             });
     }, []);
+
+    const [genres1, setGenres1] = useState([]);
+
+    useEffect(() => {
+        fetchGenres();
+    }, []);
+
+    const fetchGenres = async () => {
+        try {
+            const response = await axios.get("http://localhost:6060/api/v1/genres");
+            setGenres1(response.data);
+        } catch (error) {
+            console.error("Error fetching genres:", error);
+        }
+    };
     return (
         <>
             <div className="animate__animated animate__zoomInDown">
@@ -66,20 +81,18 @@ function Navbar() {
                                 </li>
 
                                 <li>
-                                    <a href="#" className="navbar-link">Genres</a>
+                                    <a href="" className="navbar-link">Genres</a>
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
                                         {genres.map(genre => (
-                                            <a href="#" className="navbar-link">{genre.name}</a>
+                                            <li key={genre.id}>
+                                                <Link to={`http://localhost:6060/api/v1/books?PageSize=5&PageNumber=1&GenreId=${genre.id}`} className="navbar-link">{genre.name}</Link>
+                                            </li>
                                         ))}
                                     </ul>
                                 </li>
 
                                 <li>
-                                    <a href="#" className="navbar-link">About Us</a>
-                                </li>
-
-                                <li>
-                                    <a href="#" className="navbar-link">Contact</a>
+                                    <a href="Contact" className="navbar-link">Contact</a>
                                 </li>
 
                             </ul>

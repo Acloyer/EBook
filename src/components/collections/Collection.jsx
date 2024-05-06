@@ -30,6 +30,7 @@ function Collection() {
                                 title={book.title}
                                 description=""
                                 price={book.price}
+                                id={book.id}
                             />
                         </div>
                     ))}
