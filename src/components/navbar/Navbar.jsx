@@ -92,7 +92,9 @@ function Navbar() {
                                 </li>
 
                                 <li>
-                                    <a href="Contact" className="navbar-link">Contact</a>
+                                <Link className="navbar-link" to='/Contact'>
+                                        <a>Contact</a>
+                                    </Link>
                                 </li>
 
                             </ul>

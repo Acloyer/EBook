@@ -9,6 +9,8 @@ import Book from './components/book_show_page/Book';
 import Favorite from './components/favorites_page/Favorite';
 import LoginedUserNav from './components/logined_user_navbar/LoginedUserNav';
 import Shop from './components/Shop/Shop';
+import Contact from './components/contact_page/Contact';
+
 
 function App() {
   return (
@@ -20,7 +22,7 @@ function App() {
         <Route path='/bookview' element={<Book />} />
         <Route path='/Favorite' element={<Favorite/>} />
         <Route path='/Shop' element={<Shop/>} />
-        <Route path='/aa' element={<LoginedUserNav/>} />
+        <Route path='/Contact' element={<Contact/>} />
       </Routes>
     </BrowserRouter>
   );

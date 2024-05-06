@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import Card from "../card/Card";
+import { Row, Col } from "react-bootstrap";
 
 function Shop() {
     const [books, setBooks] = useState([]);
@@ -9,14 +11,7 @@ function Shop() {
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({
-        PageSize: 5,
-        PageNumber: 1,
-        MinPrice: "",
-        MaxPrice: "",
-        Title: "",
-        LanguageId: "",
-        AuthorId: "",
-        GenreId: ""
+        PageSize: 3,
     });
 
     useEffect(() => {
@@ -56,13 +51,6 @@ function Shop() {
     };
 
     const handleSearch = () => {
-        // const filteredParams = Object.fromEntries(
-        //     Object.entries(filters).filter(([_, value]) => value !== "")
-        // );
-        // const queryString = Object.keys(filteredParams)
-        //     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(filteredParams[key])}`)
-        //     .join("&");
-        // const url = queryString ? `/Shop?${queryString}` : "/Shop";
         const url = `/Shop`;
         window.location.href = url;
     };
@@ -71,42 +59,61 @@ function Shop() {
         <div>
             <Navbar />
             <div className="shop-container">
-                <div className="filters">
-                    <h2>Filters</h2>
-                    <div>
-                        <label htmlFor="pageSize">Page Size:</label>
-                        <input type="number" id="pageSize" name="PageSize" value={filters.PageSize} onChange={handleFilterChange} />
-                    </div>
-                    <div>
-                        <label htmlFor="pageNumber">Page Number:</label>
-                        <input type="number" id="pageNumber" name="PageNumber" value={filters.PageNumber} onChange={handleFilterChange} />
-                    </div>
-                    <button onClick={handleSearch}>Search</button>
-                </div>
-                <div className="books">
-                    {loading ? (
-                        <p>Loading...</p>
-                    ) : books.length ? (
-                        <>
-                            {books.map((book) => (
-                                <div key={book.id} className="book-card">
-                                    <h2>{book.title}</h2>
-                                    <p>Author: {book.author.pseudonym}</p>
-                                    <p>Price: {book.price}</p>
-                                </div>
-                            ))}
-                            <div className="pagination">
-                                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-                                    <button key={page} onClick={() => handlePageChange(page)}>
-                                        {page}
-                                    </button>
-                                ))}
+                <Row>
+                    <Col md={3} className="leftside">
+                        <div className="filters">
+                            <h2>Filters</h2>
+                            <div>
+                                <label htmlFor="pageSize">Page Size:</label>
+                                <input type="number" id="pageSize" name="PageSize" value={filters.PageSize} onChange={handleFilterChange} />
                             </div>
-                        </>
-                    ) : (
-                        <p>No books found.</p>
-                    )}
-                </div>
+                            <div>
+                                <label htmlFor="minPrice">Min price:</label>
+                                <input type="number" id="minPrice" name="MinPrice" value={filters.MinPrice} onChange={handleFilterChange} />
+                            </div>
+                            <div>
+                                <label htmlFor="maxPrice">Max price:</label>
+                                <input type="number" id="maxPrice" name="MaxPrice" value={filters.MaxPrice} onChange={handleFilterChange} />
+                            </div>
+                            <button onClick={handleSearch}>Search</button>
+                        </div>
+                    </Col>
+                    <Col md={9} className="rightside">
+                        <section>
+                            <div className="container">
+                                <div className="row">
+                                    {loading ? (
+                                        <p>Loading...</p>
+                                    ) : books.length ? (
+                                        <>
+                                            {books.map((book) => (
+                                                <Col md={4} key={book.id}>
+                                                    <Card
+                                                        imageSrc={book.posterUrl}
+                                                        category={book.genre.name}
+                                                        title={book.title}
+                                                        description={book.description}
+                                                        price={book.price}
+                                                        id={book.id}
+                                                    />
+                                                </Col>
+                                            ))}
+                                            <div className="pagination">
+                                                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                                                    <button key={page} onClick={() => handlePageChange(page)}>
+                                                        {page}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <p>No books found.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </section>
+                    </Col>
+                </Row>
             </div>
             <Footer />
         </div>
