@@ -20,9 +20,14 @@ function Shop() {
     });
 
     useEffect(() => {
-        fetchBooks();
-    }, [currentPage, filters]); // Обновляем список книг при изменении currentPage или filters
-
+        if (Object.values(filters).some(value => value !== "")) {
+            fetchBooks();
+        } else {
+            setBooks([]);
+            setTotalPages(0);
+        }
+    }, [currentPage, filters]);
+    
     const fetchBooks = async () => {
         setLoading(true);
         try {
@@ -51,10 +56,15 @@ function Shop() {
     };
 
     const handleSearch = () => {
-        const queryString = Object.keys(filters)
-            .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(filters[key])}`)
-            .join("&");
-        window.location.href = `/Shop?${queryString}`;
+        // const filteredParams = Object.fromEntries(
+        //     Object.entries(filters).filter(([_, value]) => value !== "")
+        // );
+        // const queryString = Object.keys(filteredParams)
+        //     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(filteredParams[key])}`)
+        //     .join("&");
+        // const url = queryString ? `/Shop?${queryString}` : "/Shop";
+        const url = `/Shop`;
+        window.location.href = url;
     };
 
     return (
@@ -71,7 +81,6 @@ function Shop() {
                         <label htmlFor="pageNumber">Page Number:</label>
                         <input type="number" id="pageNumber" name="PageNumber" value={filters.PageNumber} onChange={handleFilterChange} />
                     </div>
-                    {/* Добавьте остальные фильтры здесь */}
                     <button onClick={handleSearch}>Search</button>
                 </div>
                 <div className="books">
