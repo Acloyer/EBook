@@ -5,24 +5,9 @@ import Collection from "../collections/Collection";
 import LoginedUserNav from "../logined_user_navbar/LoginedUserNav";
 
 function Header() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
-
-        if (accessToken && refreshToken) {
-            console.log(accessToken);
-            console.log(refreshToken);
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-    }, []);
-
     return (
         <>
-            {isLoggedIn ? <LoginedUserNav /> : <Navbar />} 
+            <Navbar/>
             <section className="section hero has-bg-image">
                 <div className="container">
                     <div className="animate__animated animate__zoomInLeft">
