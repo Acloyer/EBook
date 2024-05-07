@@ -1,30 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { Link } from "react-router-dom";
-import Navbar from "../navbar/Navbar";
 
 function BookList() {
-    const [books, setBooks] = useState([
-        { id: 1, title: "Book 1", category: "Category 1", price: 10.99 },
-        { id: 2, title: "Book 2", category: "Category 2", price: 15.99 },
-        { id: 3, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 4, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 5, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 6, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 7, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 8, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 9, title: "Book 3", category: "Category 3", price: 20.99 },
-        { id: 10, title: "Book 3", category: "Category 3", price: 20.99 },
-    ]);
+    const [books, setBooks] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [pageSize, setPageSize] = useState(5); // Default page size
+    const [totalCount, setTotalCount] = useState(0);
+    const [hasPrevious, setHasPrevious] = useState(false);
+    const [hasNext, setHasNext] = useState(false);
 
-    const [selectedBook, setSelectedBook] = useState(null);
+    useEffect(() => {
+        fetchBooks();
+    }, [currentPage, pageSize]); // Trigger fetchBooks when currentPage or pageSize changes
+
+    const fetchBooks = async () => {
+        try {
+            const response = await axios.get(`http://localhost:6060/api/v1/books?PageSize=${pageSize}&PageNumber=${currentPage}`);
+            setBooks(response.data.items);
+            setCurrentPage(response.data.currentPage);
+            setTotalPages(response.data.totalPages);
+            setTotalCount(response.data.totalCount);
+            setHasPrevious(response.data.hasPrevious);
+            setHasNext(response.data.hasNext);
+        } catch (error) {
+            console.error("Error fetching books:", error);
+        }
+    };
 
     const handleEdit = (id) => {
         console.log("Edit book with id:", id);
     };
 
     const handleDelete = (id) => {
-        setBooks(books.filter(book => book.id !== id));
+        // Implement delete functionality if needed
+    };
+
+    const handleNextPage = () => {
+        if (hasNext) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (hasPrevious) {
+            setCurrentPage(currentPage - 1);
+        }
     };
 
     return (
@@ -42,8 +66,12 @@ function BookList() {
                         <thead className="thead-dark">
                             <tr>
                                 <th>Book Title</th>
-                                <th>Book Category</th>
-                                <th>Book Price</th>
+                                <th>Page Count</th>
+                                <th>Price</th>
+                                <th>Language</th>
+                                <th>Quantity</th>
+                                <th>Sold Units</th>
+                                <th>Genre</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -51,8 +79,12 @@ function BookList() {
                             {books.map(book => (
                                 <tr key={book.id} className="element-body">
                                     <td>{book.title}</td>
-                                    <td>{book.category}</td>
+                                    <td>{book.pageCount}</td>
                                     <td>${book.price}</td>
+                                    <td>{book.language.name}</td>
+                                    <td>{book.quantity}</td>
+                                    <td>{book.soldUnits}</td>
+                                    <td>{book.genre.name}</td>
                                     <td className="book-buttons">
                                         <Link to='/BookEditor'>
                                             <button className="btn btn-primary mr-2 book-button" onClick={() => handleEdit(book.id)}>Edit</button>
@@ -63,6 +95,19 @@ function BookList() {
                             ))}
                         </tbody>
                     </table>
+                    <nav>
+                        <ul className="pagination">
+                            <li className={`page-item ${!hasPrevious && 'disabled'}`}>
+                                <button className="page-link" onClick={handlePreviousPage}>Previous</button>
+                            </li>
+                            <li className="page-item disabled">
+                                <span className="page-link">{currentPage} of {totalPages}</span>
+                            </li>
+                            <li className={`page-item ${!hasNext && 'disabled'}`}>
+                                <button className="page-link" onClick={handleNextPage}>Next</button>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <Footer />
