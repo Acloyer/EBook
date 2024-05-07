@@ -27,7 +27,10 @@ function Shop() {
         setLoading(true);
         try {
             const response = await axios.get(`http://localhost:6060/api/v1/books`, {
-                params: filters
+                params: {
+                    ...filters,
+                    PageNumber: currentPage
+                }
             });
             setBooks(response.data.items);
             setTotalPages(response.data.totalPages);
@@ -54,6 +57,21 @@ function Shop() {
         const url = `/Shop`;
         window.location.href = url;
     };
+
+    const handleNextPage = () => {
+        if (hasNext) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (hasPrevious) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const hasNext = currentPage < totalPages;
+    const hasPrevious = currentPage > 1;
 
     return (
         <div>
@@ -98,17 +116,23 @@ function Shop() {
                                                     />
                                                 </Col>
                                             ))}
-                                            <div className="pagination">
-                                                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-                                                    <button key={page} onClick={() => handlePageChange(page)}>
-                                                        {page}
-                                                    </button>
-                                                ))}
-                                            </div>
                                         </>
                                     ) : (
                                         <p>No books found.</p>
                                     )}
+                                    <nav>
+                                        <ul className="pagination">
+                                            <li className={`page-item ${!hasPrevious && 'disabled'}`}>
+                                                <button className="page-link" onClick={handlePreviousPage}>Previous</button>
+                                            </li>
+                                            <li className="page-item disabled">
+                                                <span className="page-link">{currentPage} of {totalPages}</span>
+                                            </li>
+                                            <li className={`page-item ${!hasNext && 'disabled'}`}>
+                                                <button className="page-link" onClick={handleNextPage}>Next</button>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </section>
