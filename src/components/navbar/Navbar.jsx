@@ -135,6 +135,11 @@ function Navbar() {
                                     </ul>
                                 </li>
                                 <li>    
+                                    <Link className="navbar-link" to='/BookList'>
+                                        <a>AdminPanel</a>
+                                    </Link>
+                                </li>
+                                <li>    
                                     <Link className="navbar-link" to='/Contact'>
                                         <a>Contact</a>
                                     </Link>
