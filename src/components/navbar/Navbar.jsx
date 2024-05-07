@@ -1,23 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import config from "../../config";
 
 function Navbar() {
     const [genres, setGenres] = useState([]);
-
-    useEffect(() => {
-        axios.get(`${config.backApi}/genres`)
-            .then(response => {
-                setGenres(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching genres:", error);
-            });
-    }, []);
-
-    const [genres1, setGenres1] = useState([]);
 
     useEffect(() => {
         fetchGenres();
@@ -26,10 +13,61 @@ function Navbar() {
     const fetchGenres = async () => {
         try {
             const response = await axios.get(`${config.backApi}/genres`);
-            setGenres1(response.data);
+            setGenres(response.data);
         } catch (error) {
             console.error("Error fetching genres:", error);
         }
+    };
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        const checkAuthentication = async () => {
+            const accessToken = getCookie("accessToken");
+            const refreshToken = getCookie("refreshToken");
+
+            if (accessToken && refreshToken) {
+                try {
+                    const decodedToken = decodeToken(accessToken);
+
+                    if (decodedToken.exp * 1000 > Date.now()) {
+                        setIsLoggedIn(true);
+                        setUserInfo({
+                            firstName: decodedToken.given_name,
+                            lastName: decodedToken.family_name,
+                            email: decodedToken.email
+                        });
+                    } else {
+                        logout();
+                    }
+                } catch (error) {
+                    console.error("Error decoding token:", error);
+                }
+            }
+        };
+
+        checkAuthentication();
+    }, []);
+
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+
+    const decodeToken = (token) => {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(base64));
+    };
+
+    const logout = () => {
+        // Очищаем cookies и устанавливаем статус авторизации как false
+        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        setIsLoggedIn(false);
+        setUserInfo(null);
     };
     return (
         <>
@@ -92,20 +130,33 @@ function Navbar() {
                                 </li>
 
                                 <li>
-                                <Link className="navbar-link" to='/Contact'>
+                                    <Link className="navbar-link" to='/Contact'>
                                         <a>Contact</a>
                                     </Link>
                                 </li>
 
-                            </ul>
-
-                            <ul className="navbar-list">
                                 <li>
-                                    <span class="material-symbols-outlined">
-                                        <Link className="navbar-auth" to='/Authentication'>
-                                            <a>person_add</a>
-                                        </Link>
-                                    </span>
+                                    {isLoggedIn ? (
+                                        <li>
+                                            <div className="user-info">
+                                                <div className="user-photo">
+                                                    <img src="user.png" alt="User" />
+                                                </div>
+                                                <div className="user-detail">
+                                                    <h2>{userInfo.firstName} {userInfo.lastName}</h2>
+                                                    <h3>{userInfo.email}</h3>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <span className="material-symbols-outlined">
+                                                <Link className="navbar-auth" to='/Authentication'>
+                                                    <a>person_add</a>
+                                                </Link>
+                                            </span>
+                                        </li>
+                                    )}
                                 </li>
                             </ul>
 
@@ -114,7 +165,7 @@ function Navbar() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Navbar;
