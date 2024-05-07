@@ -10,7 +10,10 @@ import Favorite from './components/favorites_page/Favorite';
 import LoginedUserNav from './components/logined_user_navbar/LoginedUserNav';
 import Shop from './components/Shop/Shop';
 import Contact from './components/contact_page/Contact';
-
+import BookList from './components/book_list_page/BookList';
+import BookEditor from './components/books_list_for_admin/BookEditor';
+import AddBook from './components/add_book_page/AddBook';
+import Profile from './components/Profile/Profile';
 
 function App() {
   return (

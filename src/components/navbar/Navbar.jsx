@@ -8,6 +8,16 @@ import { ExitOutline } from 'react-ionicons'
 import { OptionsOutline } from 'react-ionicons'
 
 function Navbar() {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const handleMouseEnter = () => {
+        setDropdownOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        setDropdownOpen(false);
+    };
+
     const [genres, setGenres] = useState([]);
 
     useEffect(() => {
@@ -137,10 +147,8 @@ function Navbar() {
                                         <a>Contact</a>
                                     </Link>
                                 </li>
-
-                                <li>
+                                <div className="user-info">
                                     {isLoggedIn ? (
-                                        <li>
                                             <div className="user-info">
                                                 <div className="basket">
                                                     <BasketOutline className="basket-icon"
@@ -151,8 +159,8 @@ function Navbar() {
                                                     <img src="user.png" />
                                                 </div>
                                                 <div className="user-detail">
-                                                    <h2>{userInfo}</h2>
-                                                    <h3>testemail@gmail.com</h3>
+                                                    <h2>{userInfo.firstName} {userInfo.lastName}</h2>
+                                                    <h3>{userInfo.email}</h3>
                                                 </div>
                                                 <div
                                                     className="dropdown-shape"
@@ -170,7 +178,6 @@ function Navbar() {
                                                     )}
                                                 </div>
                                             </div>
-                                        </li>
                                     ) : (
                                         <li>
                                             <span className="material-symbols-outlined">
@@ -180,7 +187,7 @@ function Navbar() {
                                             </span>
                                         </li>
                                     )}
-                                </li>
+                                </div>
                             </ul>
 
                         </nav>
