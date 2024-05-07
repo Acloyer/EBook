@@ -1,60 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HeartOutline, HeartSharp } from 'react-ionicons';
-import { CartOutline, CartSharp } from 'react-ionicons';
+import { HeartOutline, HeartSharp } from 'react-ionicons'
+import { CartOutline, CartSharp } from 'react-ionicons'
 import axios from "axios";
 
 function Card({ imageSrc, category, title, description, price, id }) {
+
     const [isHeartHovered, setIsHeartHovered] = useState(false);
     const [isHeartClicked, setIsHeartClicked] = useState(false);
     const [isCartHovered, setIsCartHovered] = useState(false);
     const [isCartClicked, setIsCartClicked] = useState(false);
 
     useEffect(() => {
-        // Check if book is already in wishlist
-        const checkWishlist = async () => {
+        const fetchData = async () => {
             const accessToken = getCookie("accessToken");
             const refreshToken = getCookie("refreshToken");
 
             if (accessToken && refreshToken) {
                 try {
-                    const response = await axios.get(`http://localhost:6060/api/v1/wisher`, {
+                    const cartResponse = await axios.get("http://localhost:6060/api/v1/carts", {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
-                    const bookIds = response.data.map(book => book.id);
-                    setIsHeartClicked(bookIds.includes(id));
-                } catch (error) {
-                    console.error("Error checking wishlist:", error);
-                }
-            }
-        };
-
-        checkWishlist();
-    }, [id]);
-
-    useEffect(() => {
-        const checkCart = async () => {
-            const accessToken = getCookie("accessToken");
-            const refreshToken = getCookie("refreshToken");
-
-            if (accessToken && refreshToken) {
-                try {
-                    const response = await axios.get(`http://localhost:6060/api/v1/carts`, {
+                    const wishlistResponse = await axios.get("http://localhost:6060/api/v1/wisher", {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
-                    const bookIds = response.data.items.map(item => item.book.id);
-                    setIsCartClicked(bookIds.includes(id));
+
+                    const cartBookIds = cartResponse.data.items.map(item => item.book.id);
+                    const wishlistBookIds = wishlistResponse.data.items.map(item => item.book.id);
+
+                    const isInCart = cartBookIds.includes(id);
+
+                    const isInWishlist = wishlistBookIds.includes(id);
+                    
+                    setIsCartClicked(isInCart);
+
+                    setIsHeartClicked(isInWishlist);
+                    
+                    console.log("isInCart: " + isInCart)
+                    console.log("isInWishlist: " + isInWishlist)
                 } catch (error) {
-                    console.error("Error checking cart:", error);
+                    console.error("Error fetching data:", error);
                 }
             }
         };
 
-        checkCart();
+        fetchData();
     }, [id]);
 
     const handleHeartMouseEnter = () => {
@@ -68,24 +62,27 @@ function Card({ imageSrc, category, title, description, price, id }) {
     const handleHeartClick = async () => {
         const accessToken = getCookie("accessToken");
         const refreshToken = getCookie("refreshToken");
-
+    
         if (accessToken && refreshToken) {
+            setIsHeartClicked(prevState => !prevState);
             try {
                 if (isHeartClicked) {
+                    console.log(`deleting heart : ${id}`)
                     await axios.delete(`http://localhost:6060/api/v1/wisher/${id}`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
                 } else {
+                    console.log(`putting heart : ${id}`)
                     await axios.put(`http://localhost:6060/api/v1/wisher/${id}`, null, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
                 }
-                setIsHeartClicked(prevState => !prevState);
             } catch (error) {
+                setIsHeartClicked(prevState => !prevState);
                 console.error("Error updating wishlist:", error);
             }
         }
@@ -102,32 +99,40 @@ function Card({ imageSrc, category, title, description, price, id }) {
     const handleCartClick = async () => {
         const accessToken = getCookie("accessToken");
         const refreshToken = getCookie("refreshToken");
-
+    
         if (accessToken && refreshToken) {
             try {
                 if (isCartClicked) {
-                    // Get cartId from API
-                    const response = await axios.get(`http://localhost:6060/api/v1/carts`);
-                    const cartId = response.data.id;
-                    await axios.delete(`http://localhost:6060/api/v1/carts/${cartId}/items/${id}`, {
+                    const cartResponse = await axios.get("http://localhost:6060/api/v1/carts", {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
+                    const cartId = cartResponse.data.items.find(item => item.book.id === id)?.id;
+                    console.log(cartId);
+                    console.log(`deleting cart : ${id}`);
+                    await axios.delete(`http://localhost:6060/api/v1/carts/items/${cartId}`, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    });
+                    setIsCartClicked(false);
                 } else {
+                    console.log(`posting cart: ${id}`);
                     await axios.post(`http://localhost:6060/api/v1/carts/${id}`, null, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
+                    setIsCartClicked(true);
                 }
-                setIsCartClicked(prevState => !prevState);
             } catch (error) {
                 console.error("Error updating cart:", error);
             }
         }
     };
-
+    
+    
     const getCookie = (name) => {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -136,16 +141,12 @@ function Card({ imageSrc, category, title, description, price, id }) {
 
     return (
         <div className="product-card">
-            <div className="product-tumb">
-                <Link to={`/BookView?id=${id}`}>
-                    <img src={imageSrc} alt={title} />
-                </Link>
+            <div className="product-tumb" onClick={() => window.location.href = `http://localhost:3000/BookView?id=${id}`}>
+                <img src={imageSrc} alt={title} />
             </div>
             <div className="product-details">
                 <span className="product-catagory">{category}</span>
-                <Link className="product-title" to={`/BookView?id=${id}`}>
-                    <h4>{title}</h4>
-                </Link>
+                <h4><Link to={`/BookView?id=${id}`}>{title}</Link></h4>
                 <p>{description}</p>
                 <div className="product-bottom-details">
                     <div className="product-price">${price}</div>

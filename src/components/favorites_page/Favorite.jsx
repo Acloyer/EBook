@@ -5,6 +5,10 @@ import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 
 function Favorite() {
+    const updateFavorites = () => {
+        fetchFavoriteBooks(getCookie("accessToken"));
+    };
+
     const [favoriteBooks, setFavoriteBooks] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -47,24 +51,25 @@ function Favorite() {
             <section className="section featured animate__animated animate__zoomInUp" aria-label="featured collection">
                 <div className="container">
                     <div className="row" style={{margin: "10px", display: "flex", width: "100%", flexDirection: "row", justifyContent: "center"}}>
-                        {loading ? (
-                            <p>Loading...</p>
-                        ) : favoriteBooks.length ? (
-                            favoriteBooks.map((book, index) => (
-                                <div className="col-md-3" key={index}>
-                                    {console.log(book)}
-                                    <Card
-                                        imageSrc={book.book.posterUrl}
-                                        category={book.book.category}
-                                        title={book.book.title}
-                                        description={book.book.description}
-                                        price={book.book.price}
-                                    />
-                                </div>
-                            ))
-                        ) : (
-                            <h1>No favorite books found.</h1>
-                        )}
+                    {loading ? (
+                    <p>Loading...</p>
+                    ) : favoriteBooks.length ? (
+                        favoriteBooks.map((book, index) => (
+                            <div className="col-md-3" key={index}>
+                                <Card
+                                    imageSrc={book.book.posterUrl}
+                                    category={book.book.category}
+                                    title={book.book.title}
+                                    description={book.book.description}
+                                    price={book.book.price}
+                                    id={book.book.id}
+                                    updateFavorites={updateFavorites}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <h1>No favorite books found.</h1>
+                    )}
                     </div>
                 </div>
             </section>
