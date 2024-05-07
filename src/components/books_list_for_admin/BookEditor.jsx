@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LoginedUserNav from "../logined_user_navbar/LoginedUserNav";
 import Footer from "../footer/Footer";
+import Navbar from "../navbar/Navbar";
 
 function BookEditor() {
     const [book, setBook] = useState({
@@ -36,7 +36,7 @@ function BookEditor() {
 
     return(
         <>
-            <LoginedUserNav/>
+            <Navbar/>
             <div className="container animate__animated animate__zoomInUp">
                 <h2>Edit Book</h2>
                 <form>

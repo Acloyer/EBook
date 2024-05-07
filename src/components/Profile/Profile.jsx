@@ -1,11 +1,11 @@
 import React from "react";
-import LoginedUserNav from "../logined_user_navbar/LoginedUserNav";
 import Footer from "../footer/Footer";
+import Navbar from "../navbar/Navbar";
 
 function Profile() {
     return (
         <>
-            <LoginedUserNav />
+            <Navbar />
             <section>
                 <div className="container">
                     <div className="row">

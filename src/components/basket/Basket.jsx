@@ -1,27 +1,61 @@
-// import React, { useState } from "react";
-// import { BasketOutline } from 'react-ionicons'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Container, Row, Col } from 'react-bootstrap';
+import Card from '../card/Card'; // Импортируйте ваш компонент Card
+import Navbar from "../navbar/Navbar";
+import Footer from "../footer/Footer";
 
-// function Basket() {
-//     const books = [
-//         { id: 1, cover: "book1.jpg", title: "Book 1", author: "Author 1", price: "$10" },
-//         { id: 2, cover: "book2.jpg", title: "Book 2", author: "Author 2", price: "$15" },
-//         { id: 3, cover: "book3.jpg", title: "Book 3", author: "Author 3", price: "$20" },
-//     ];
+function Basket() {
+    const [cartItems, setCartItems] = useState([]);
 
-//     return (
-//         <div className="basket-content">
-//             {books.map(book => (
-//                 <div key={book.id} className="book-item">
-//                     <img src={book.cover} alt={book.title} />
-//                     <div className="book-info">
-//                         <h3>{book.title}</h3>
-//                         <p>{book.author}</p>
-//                         <p>{book.price}</p>
-//                     </div>
-//                 </div>
-//             ))}
-//         </div>
-//     );
-// }
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            try {
+                const accessToken = getCookie("accessToken");
+                const response = await axios.get("http://localhost:6060/api/v1/carts", {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                setCartItems(response.data.items);
+            } catch (error) {
+                console.error("Error fetching cart items:", error);
+            }
+        };
 
-// export default Basket;
+        fetchCartItems();
+    }, []);
+
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+
+    return (
+        <>
+            <Navbar/>
+            <Container>
+                <h1>Shopping Cart</h1>
+                <Row>
+                    {cartItems.map((item) => (
+                        <Col key={item.id} lg={4} md={6} sm={12}>
+                            {console.log(item.book)}
+                            <Card
+                                id={item.book.id}
+                                imageSrc={item.book.posterUrl}
+                                category={item.book.category}
+                                title={item.book.title}
+                                description={item.book.description}
+                                price={item.book.price}
+                            />
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
+            <Footer/>
+        </>
+    );
+}
+
+export default Basket;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import config from "../../config";
-import { BasketOutline } from 'react-ionicons'
+import { Airplane, BasketOutline, HandRight } from 'react-ionicons'
 import { ChevronDownOutline } from 'react-ionicons'
 import { ExitOutline } from 'react-ionicons'
 import { OptionsOutline } from 'react-ionicons'
@@ -102,9 +102,7 @@ function Navbar() {
 
                 <div className="header-bottom" data-navbar>
                     <div className="container">
-
                         <nav className="navbar">
-
                             <div className="navbar-top">
                                 <input type="search" name="search" placeholder="Search our store" className="input-field" />
 
@@ -112,25 +110,20 @@ function Navbar() {
                                     <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
                                 </button>
                             </div>
-
                             <ul className="navbar-list">
-
                                 <li>
                                     <Link className="navbar-link" to='/Home'>
                                         <a>Home</a>
                                     </Link>
                                 </li>
-
                                 <li>
                                     <a href="Shop" className="navbar-link">Shop</a>
                                 </li>
-
                                 <li>
                                     <Link className="navbar-link" to='/Favorite'>
                                         <a>Favorites</a>
                                     </Link>
                                 </li>
-
                                 <li>
                                     <a href="" className="navbar-link">Genres</a>
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
@@ -141,55 +134,56 @@ function Navbar() {
                                         ))}
                                     </ul>
                                 </li>
-
-                                <li>
+                                <li>    
                                     <Link className="navbar-link" to='/Contact'>
                                         <a>Contact</a>
                                     </Link>
                                 </li>
-                                <div className="user-info">
-                                    {isLoggedIn ? (
-                                            <div className="user-info">
-                                                <div className="basket">
+                                {isLoggedIn ? (
+                                    <div className="ml-auto" style={{padding: "0px 300px"}}>
+                                        <div className="user-info">
+                                            <div className="basket">
+                                                <a href="/Basket">
                                                     <BasketOutline className="basket-icon"
+                                                        href="/Basket"
                                                         height="auto"
                                                         width="30px" />
-                                                </div>
-                                                <div className="user-photo">
-                                                    <img src="user.png" />
-                                                </div>
-                                                <div className="user-detail">
-                                                    <h2>{userInfo.firstName} {userInfo.lastName}</h2>
-                                                    <h3>{userInfo.email}</h3>
-                                                </div>
-                                                <div
-                                                    className="dropdown-shape"
-                                                    onMouseEnter={handleMouseEnter}
-                                                    onMouseLeave={handleMouseLeave}
-                                                >
-                                                    <ChevronDownOutline className="shape" height="auto" width="25px" />
-                                                    {dropdownOpen && (
-                                                        <div className="shape-dropdown">
-                                                            <ul className="animate__animated animate__bounceIn">
-                                                                <li><a className="shape-link" href="/Profile"><OptionsOutline /></a></li>
-                                                                <li><a className="shape-link"><ExitOutline /></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                </a>
                                             </div>
-                                    ) : (
-                                        <li>
-                                            <span className="material-symbols-outlined">
-                                                <Link className="navbar-auth" to='/Authentication'>
-                                                    <a>person_add</a>
-                                                </Link>
-                                            </span>
-                                        </li>
-                                    )}
-                                </div>
+                                            <div className="user-photo">
+                                                <img src="user.png" />
+                                            </div>
+                                            <div className="user-detail">
+                                                <h4>{userInfo.firstName} {userInfo.lastName}</h4>
+                                                <h5>{userInfo.email}</h5>
+                                            </div>
+                                            <div
+                                                className="dropdown-shape"
+                                                onMouseEnter={handleMouseEnter}
+                                                onMouseLeave={handleMouseLeave}
+                                                >
+                                                <ChevronDownOutline className="shape" height="auto" width="25px"/>
+                                                {dropdownOpen && (
+                                                    <div className="shape-dropdown">
+                                                        <ul className="animate__animated animate__bounceIn">
+                                                            <li><a className="shape-link" href="/Profile"><OptionsOutline /></a></li>
+                                                            <li><a className="shape-link" onClick={logout}><ExitOutline /></a></li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <li>
+                                        <span className="material-symbols-outlined" style={{padding: "0px 500px"}}>
+                                            <Link className="navbar-auth" to='/Authentication'>
+                                                <a>person_add</a>
+                                            </Link>
+                                        </span>
+                                    </li>
+                                )}
                             </ul>
-
                         </nav>
                     </div>
                 </div>

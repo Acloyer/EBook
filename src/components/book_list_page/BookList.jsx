@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import LoginedUserNav from "../logined_user_navbar/LoginedUserNav";
 import Footer from "../footer/Footer";
-import BookEditor from "../books_list_for_admin/BookEditor";
 import { Link } from "react-router-dom";
+import Navbar from "../navbar/Navbar";
 
 function BookList() {
     const [books, setBooks] = useState([
@@ -30,7 +29,7 @@ function BookList() {
 
     return (
         <>
-            <LoginedUserNav />
+            <Navbar />
             <div className="content-wrapper animate__animated animate__zoomInUp">
                 <div className="container">
                     <div className="list-header">
@@ -66,7 +65,6 @@ function BookList() {
                     </table>
                 </div>
             </div>
-
             <Footer />
         </>
     );

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import Features from "../features/Features";
 import Collection from "../collections/Collection";
-import LoginedUserNav from "../logined_user_navbar/LoginedUserNav";
 
 function Header() {
     return (
