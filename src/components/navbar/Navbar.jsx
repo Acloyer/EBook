@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import config from "../../config";
+import { BasketOutline } from 'react-ionicons'
+import { ChevronDownOutline } from 'react-ionicons'
+import { ExitOutline } from 'react-ionicons'
+import { OptionsOutline } from 'react-ionicons'
 
 function Navbar() {
     const [genres, setGenres] = useState([]);
@@ -63,7 +67,6 @@ function Navbar() {
     };
 
     const logout = () => {
-        // Очищаем cookies и устанавливаем статус авторизации как false
         document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         setIsLoggedIn(false);
@@ -139,12 +142,32 @@ function Navbar() {
                                     {isLoggedIn ? (
                                         <li>
                                             <div className="user-info">
+                                                <div className="basket">
+                                                    <BasketOutline className="basket-icon"
+                                                        height="auto"
+                                                        width="30px" />
+                                                </div>
                                                 <div className="user-photo">
-                                                    <img src="user.png" alt="User" />
+                                                    <img src="user.png" />
                                                 </div>
                                                 <div className="user-detail">
-                                                    <h2>{userInfo.firstName} {userInfo.lastName}</h2>
-                                                    <h3>{userInfo.email}</h3>
+                                                    <h2>{userInfo}</h2>
+                                                    <h3>testemail@gmail.com</h3>
+                                                </div>
+                                                <div
+                                                    className="dropdown-shape"
+                                                    onMouseEnter={handleMouseEnter}
+                                                    onMouseLeave={handleMouseLeave}
+                                                >
+                                                    <ChevronDownOutline className="shape" height="auto" width="25px" />
+                                                    {dropdownOpen && (
+                                                        <div className="shape-dropdown">
+                                                            <ul className="animate__animated animate__bounceIn">
+                                                                <li><a className="shape-link" href="/Profile"><OptionsOutline /></a></li>
+                                                                <li><a className="shape-link"><ExitOutline /></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </li>

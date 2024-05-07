@@ -23,6 +23,10 @@ function App() {
         <Route path='/Favorite' element={<Favorite/>} />
         <Route path='/Shop' element={<Shop/>} />
         <Route path='/Contact' element={<Contact/>} />
+        <Route path='/BookList' element={<BookList/>} />
+        <Route path='/BookEditor' element={<BookEditor/>} />
+        <Route path='/AddBook' element={<AddBook/>} />
+        <Route path='/Profile' element={<Profile/>} />
       </Routes>
     </BrowserRouter>
   );
