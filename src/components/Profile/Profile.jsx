@@ -7,7 +7,7 @@ function Profile() {
         <>
             <Navbar />
             <section>
-                <div className="container">
+                <div className="container animate__animated animate__zoomInDown">
                     <div className="row">
                         <div className="col-lg-12 mb-4 mb-sm-5">
                             <div className="card card-style1 border-0">
