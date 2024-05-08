@@ -64,7 +64,7 @@ function BookList() {
                 <div className="container">
                     <div className="list-header">
                         <h2>Book List</h2>
-                        <Link to='/AddBook'>
+                        <Link to='/add-book'>
                             <button className="btn btn-success mb-3 book-button">Add New Book</button>
                         </Link>
                     </div>
@@ -83,7 +83,7 @@ function BookList() {
                             <Column style={{ width: '10%' }} header="ㅤㅤㅤActions" body={(rowData) => {
                                 return (
                                     <div className="book-buttons">
-                                        <Link to={'/BookEditor?' + rowData.id}>
+                                        <Link to={'/book-editor?' + rowData.id}>
                                             <Button className="btn btn-primary mr-2 book-button"/>
                                         </Link>
                                         <Link to={''}>
