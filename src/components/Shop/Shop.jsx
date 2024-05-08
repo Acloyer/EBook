@@ -105,7 +105,7 @@ function Shop() {
                                     ) : books.length ? (
                                         <>
                                             {books.map((book) => (
-                                                <Col md={4} key={book.id}>
+                                                <Col md={3} key={book.id}>
                                                     <Card
                                                         imageSrc={book.posterUrl}
                                                         category={book.genre.name}
@@ -116,23 +116,23 @@ function Shop() {
                                                     />
                                                 </Col>
                                             ))}
+                                            <nav>
+                                                <ul className="pagination">
+                                                    <li className={`page-item ${!hasPrevious && 'disabled'}`}>
+                                                        <button className="page-link" onClick={handlePreviousPage}>Previous</button>
+                                                    </li>
+                                                    <li className="page-item disabled">
+                                                        <span className="page-link">{currentPage} of {totalPages}</span>
+                                                    </li>
+                                                    <li className={`page-item ${!hasNext && 'disabled'}`}>
+                                                        <button className="page-link" onClick={handleNextPage}>Next</button>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                         </>
                                     ) : (
                                         <p>No books found.</p>
                                     )}
-                                    <nav>
-                                        <ul className="pagination">
-                                            <li className={`page-item ${!hasPrevious && 'disabled'}`}>
-                                                <button className="page-link" onClick={handlePreviousPage}>Previous</button>
-                                            </li>
-                                            <li className="page-item disabled">
-                                                <span className="page-link">{currentPage} of {totalPages}</span>
-                                            </li>
-                                            <li className={`page-item ${!hasNext && 'disabled'}`}>
-                                                <button className="page-link" onClick={handleNextPage}>Next</button>
-                                            </li>
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </section>

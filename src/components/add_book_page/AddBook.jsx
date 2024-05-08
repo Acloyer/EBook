@@ -33,7 +33,7 @@ function AddBook() {
 
     return (
         <>
-            <Navbar />
+            <Navbar/>
             <div className="container animate__animated animate__zoomInUp">
                 <h2>Add New Book</h2>
                 <form>
