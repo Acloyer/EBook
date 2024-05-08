@@ -3,6 +3,12 @@ import axios from "axios";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { Link } from "react-router-dom";
+import { Button } from 'primereact/button';
+import { FaRegTrashAlt } from "react-icons/fa";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { IconField } from "primereact/iconfield";
+import { InputIcon } from "primereact/inputicon";
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -13,31 +19,28 @@ function BookList() {
     const [hasPrevious, setHasPrevious] = useState(false);
     const [hasNext, setHasNext] = useState(false);
 
-    useEffect(() => {
-        fetchBooks();
-    }, [currentPage, pageSize]); // Trigger fetchBooks when currentPage or pageSize changes
-
     const fetchBooks = async () => {
         try {
             const response = await axios.get(`http://localhost:6060/api/v1/books?PageSize=${pageSize}&PageNumber=${currentPage}`);
             setBooks(response.data.items);
-            setCurrentPage(response.data.currentPage);
             setTotalPages(response.data.totalPages);
+            setPageSize(response.data.pageSize);
             setTotalCount(response.data.totalCount);
             setHasPrevious(response.data.hasPrevious);
             setHasNext(response.data.hasNext);
+
         } catch (error) {
             console.error("Error fetching books:", error);
         }
     };
 
-    const handleEdit = (id) => {
-        console.log("Edit book with id:", id);
-    };
-
-    const handleDelete = (id) => {
-        // Implement delete functionality if needed
-    };
+    useEffect(() => {
+        const getBooks = async () => {
+            await fetchBooks();
+            console.log(books)
+        }
+        getBooks();
+    }, [currentPage, pageSize]); // Trigger fetchBooks when currentPage, pageSize changes, or on page load
 
     const handleNextPage = () => {
         if (hasNext) {
@@ -51,6 +54,9 @@ function BookList() {
         }
     };
 
+
+    // price DataTable
+    //
     return (
         <>
             <Navbar />
@@ -62,39 +68,39 @@ function BookList() {
                             <button className="btn btn-success mb-3 book-button">Add New Book</button>
                         </Link>
                     </div>
-                    <table className="table table-striped book-table">
-                        <thead className="thead-dark">
-                            <tr>
-                                <th>Book Title</th>
-                                <th>Page Count</th>
-                                <th>Price</th>
-                                <th>Language</th>
-                                <th>Quantity</th>
-                                <th>Sold Units</th>
-                                <th>Genre</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {books.map(book => (
-                                <tr key={book.id} className="element-body">
-                                    <td>{book.title}</td>
-                                    <td>{book.pageCount}</td>
-                                    <td>${book.price}</td>
-                                    <td>{book.language.name}</td>
-                                    <td>{book.quantity}</td>
-                                    <td>{book.soldUnits}</td>
-                                    <td>{book.genre.name}</td>
-                                    <td className="book-buttons">
-                                        <Link to='/BookEditor'>
-                                            <button className="btn btn-primary mr-2 book-button" onClick={() => handleEdit(book.id)}>Edit</button>
+
+                    <div className="card">
+                        <DataTable value={books} showGridlines={true} tableStyle={{ minWidth: '50rem' }}>
+                            <Column field="title" header="Title" sortable  style={{ width: '10%', height: '50px' }}/>
+                            <Column field="author.pseudonym" header="Author" sortable  style={{ width: '10%' }}/>
+                            <Column field="genre.name" header="Genre" sortable style={{ width: '10%' }} />
+                            <Column field="language.name" header="Language" sortable  style={{ width: '10%' }}/>
+                            <Column field="pageCount" header="Page Count" sortable style={{ width: '10%' }} />
+                            <Column field="price" header="Price" sortable style={{ width: '10%' }} />
+                            <Column field="quantity" header="Quantity" sortable  style={{ width: '10%' }}/>
+                            <Column field="soldUnits" header="Sold Units" sortable  style={{ width: '10%' }}/>
+
+                            <Column style={{ width: '10%' }} header="ㅤㅤㅤActions" body={(rowData) => {
+                                return (
+                                    <div className="book-buttons">
+                                        <Link to={'/BookEditor?' + rowData.id}>
+                                            <Button className="btn btn-primary mr-2 book-button"/>
                                         </Link>
-                                        <button className="btn btn-danger book-button" onClick={() => handleDelete(book.id)}>Delete</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        <Link to={''}>
+                                            {/* <Button icon={<FaRegTrashAlt/>} className="btn btn-danger" style={{ width: '35px', height: '35px'}}  /> */}
+                                            <Button className="btn btn-danger mr-2 book-button" style={{ width: '25px', height: '25px'}} ><InputIcon className="pi pi-trash"> </InputIcon></Button>
+                                            {/* <IconField>
+                                                <InputIcon className="pi pi-trash"> </InputIcon>
+                                                <Button className="btn btn-danger" style={{ width: '35px', height: '35px'}} />
+                                            </IconField> */}
+                                            {/* icon={<FaRegTrashAlt/>}  */}
+                                        </Link>
+                                    </div>
+                                );
+                            }} />
+                        </DataTable>
+                    </div>
+
                     <nav>
                         <ul className="pagination">
                             <li className={`page-item ${!hasPrevious && 'disabled'}`}>
