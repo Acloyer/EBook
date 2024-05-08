@@ -22,14 +22,15 @@ function Shop() {
             setTotalPages(0);
         }
     }, [currentPage, filters]);
-    
+
     const fetchBooks = async () => {
         setLoading(true);
         try {
             const response = await axios.get(`http://localhost:6060/api/v1/books`, {
                 params: {
                     ...filters,
-                    PageNumber: currentPage
+                    PageNumber: currentPage,
+                    Title: getUrlSearchParameter("search")
                 }
             });
             setBooks(response.data.items);
@@ -39,6 +40,12 @@ function Shop() {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Функция для получения значения параметра из URL
+    const getUrlSearchParameter = (name) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
     };
 
     const handlePageChange = (page) => {
