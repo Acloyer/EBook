@@ -141,12 +141,12 @@ function Card({ imageSrc, category, title, description, price, id }) {
 
     return (
         <div className="product-card">
-            <div className="product-tumb" onClick={() => window.location.href = `http://localhost:3000/BookView?id=${id}`}>
+            <div className="product-tumb" onClick={() => window.location.href = `http://localhost:3000/book-view?id=${id}`}>
                 <img src={imageSrc} alt={title} />
             </div>
             <div className="product-details">
                 <span className="product-catagory">{category}</span>
-                <h4><Link to={`/BookView?id=${id}`}>{title}</Link></h4>
+                <h4><Link to={`/book-view?id=${id}`}>{title}</Link></h4>
                 <p>{description}</p>
                 <div className="product-bottom-details">
                     <div className="product-price">${price}</div>
