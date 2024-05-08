@@ -6,6 +6,7 @@ import { Airplane, BasketOutline, HandRight } from 'react-ionicons'
 import { ChevronDownOutline } from 'react-ionicons'
 import { ExitOutline } from 'react-ionicons'
 import { OptionsOutline } from 'react-ionicons'
+import { HeartOutline } from 'react-ionicons'
 
 function Navbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -82,6 +83,18 @@ function Navbar() {
         setIsLoggedIn(false);
         setUserInfo(null);
     };
+
+    //
+    const [searchValue, setSearchValue] = useState('');
+
+    const handleSearch = () => {
+        if (searchValue.trim() !== '') {
+            const encodedSearchValue = encodeURIComponent(searchValue);
+            window.location.href = `/shop?search=${encodedSearchValue}`;
+        }
+    };
+    //
+    
     return (
         <>
             <div className="animate__animated animate__zoomInDown">
@@ -93,9 +106,15 @@ function Navbar() {
                         </a>
 
                         <div className="input-wrapper">
-                            <input type="search" name="search" placeholder="Search" className="input-field" />
-
-                            <button className="btn btn-primary">Search</button>
+                            <input
+                                type="search"
+                                name="search"
+                                placeholder="Search"
+                                className="input-field"
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                            />
+                            <button className="btn btn-primary" onClick={handleSearch}>Search</button>
                         </div>
                     </div>
                 </div>
@@ -112,20 +131,16 @@ function Navbar() {
                             </div>
                             <ul className="navbar-list">
                                 <li>
-                                    <Link className="navbar-link" to='/Home'>
+                                    <Link className="navbar-link" to='/home'>
                                         <p>Home</p>
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link className="navbar-link" to='/Shop'>
+                                    <Link className="navbar-link" to='/shop'>
                                         <p>Shop</p>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link className="navbar-link" to='/Favorite'>
-                                        <p>Favorites</p>
-                                    </Link>
-                                </li>
+                                
                                 <li>
                                     <a href="#" className="navbar-link">Genres</a>
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
@@ -137,25 +152,34 @@ function Navbar() {
                                     </ul>
                                 </li>
                                 <li>    
-                                    <Link className="navbar-link" to='/BookList'>
+                                    <Link className="navbar-link" to='/book-list'>
                                         <p>AdminPanel</p>
                                     </Link>
                                 </li>
                                 <li>    
-                                    <Link className="navbar-link" to='/Contact'>
+                                    <Link className="navbar-link" to='/contact'>
                                         <p>Contact</p>
                                     </Link>
                                 </li>
                                 {isLoggedIn ? (
                                     <div className="ml-auto" style={{padding: "0px 300px"}}>
                                         <div className="user-info">
-                                            <div className="basket">
-                                                <a href="/Basket">
+                                            <div className="user-icons">
+                                                <div className="basket">
+                                                    <p>(0)</p>
                                                     <BasketOutline className="basket-icon"
-                                                        href="/Basket"
                                                         height="auto"
                                                         width="30px" />
-                                                </a>
+                                                </div>
+                                                <div className="favorites">
+                                                    <Link className="navbar-link" to='/favorite'>
+                                                        <HeartOutline
+                                                            color={'#00000'}
+                                                            height="auto"
+                                                            width="25px"
+                                                        />
+                                                    </Link>
+                                                </div>
                                             </div>
                                             <div className="user-photo">
                                                 <img src="user.png" />
@@ -183,11 +207,22 @@ function Navbar() {
                                     </div>
                                 ) : (
                                     <li>
-                                        <span className="material-symbols-outlined" style={{padding: "0px 500px"}}>
-                                            <Link className="navbar-auth" to='/Authentication'>
-                                                <p>person_add</p>
-                                            </Link>
-                                        </span>
+                                        <div className="nav-icons" style={{padding: "0px 400px"}}>
+                                            <div className="favorites">
+                                                <Link className="navbar-link" to='/favorite'>
+                                                    <HeartOutline
+                                                        color={'#00000'}
+                                                        height="auto"
+                                                        width="25px"
+                                                    />
+                                                </Link>
+                                            </div>
+                                            <span class="material-symbols-outlined">
+                                                <Link className="navbar-auth" to='/Authentication'>
+                                                    <a>person_add</a>
+                                                </Link>
+                                            </span>
+                                        </div>
                                     </li>
                                 )}
                             </ul>
