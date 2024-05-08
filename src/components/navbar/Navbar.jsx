@@ -113,19 +113,21 @@ function Navbar() {
                             <ul className="navbar-list">
                                 <li>
                                     <Link className="navbar-link" to='/Home'>
-                                        <a>Home</a>
+                                        <p>Home</p>
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="Shop" className="navbar-link">Shop</a>
+                                    <Link className="navbar-link" to='/Shop'>
+                                        <p>Shop</p>
+                                    </Link>
                                 </li>
                                 <li>
                                     <Link className="navbar-link" to='/Favorite'>
-                                        <a>Favorites</a>
+                                        <p>Favorites</p>
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="" className="navbar-link">Genres</a>
+                                    <a href="#" className="navbar-link">Genres</a>
                                     <ul className="dropdown-menu animate__animated animate__bounceIn">
                                         {genres.map(genre => (
                                             <li key={genre.id}>
@@ -136,12 +138,12 @@ function Navbar() {
                                 </li>
                                 <li>    
                                     <Link className="navbar-link" to='/BookList'>
-                                        <a>AdminPanel</a>
+                                        <p>AdminPanel</p>
                                     </Link>
                                 </li>
                                 <li>    
                                     <Link className="navbar-link" to='/Contact'>
-                                        <a>Contact</a>
+                                        <p>Contact</p>
                                     </Link>
                                 </li>
                                 {isLoggedIn ? (
@@ -171,7 +173,7 @@ function Navbar() {
                                                 {dropdownOpen && (
                                                     <div className="shape-dropdown">
                                                         <ul className="animate__animated animate__bounceIn">
-                                                            <li><a className="shape-link" href="/Profile"><OptionsOutline /></a></li>
+                                                            <li><a className="navbar-link shape-link" href="/Profile"><OptionsOutline /></a></li>
                                                             <li><a className="shape-link" onClick={logout}><ExitOutline /></a></li>
                                                         </ul>
                                                     </div>
@@ -183,7 +185,7 @@ function Navbar() {
                                     <li>
                                         <span className="material-symbols-outlined" style={{padding: "0px 500px"}}>
                                             <Link className="navbar-auth" to='/Authentication'>
-                                                <a>person_add</a>
+                                                <p>person_add</p>
                                             </Link>
                                         </span>
                                     </li>
