@@ -542,6 +542,12 @@ body {
   text-decoration: none;
 }
 
+.nav-icons {
+  display: flex;
+  text-align: center;
+  gap: 1rem;
+}
+
 .navbar-auth {
   padding-block: 10px;
   transition: var(--transition-1);
@@ -1624,8 +1630,11 @@ body {
 /* LOGINED USER NAVBAR */
 
 .user-info {
+  position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .user-photo img {
@@ -1995,7 +2004,15 @@ a {
 /* BASKET */
 
 .basket {
-  margin-right: 15px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+
+.basket p {
+  font-size: 18px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin-right: 3px;
 }
 
 .basket-icon {
@@ -2004,7 +2021,15 @@ a {
 }
 
 .basket-icon:hover {
-  transform: scale(1.3);
+  transform: scale(1.1);
+}
+
+.user-icons {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  gap: 2px
 }
 
 /* PROFILE DROPDOWN */
@@ -2162,4 +2187,30 @@ section {
 }
 .rounded {
   border-radius: 0.25rem!important;
+}
+
+/* PROFILE */
+
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.qr-code {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+  margin-right: 30px;
+}
+
+.qr-code img {
+  width: 400px;
+  height: 400px;
+}
+
+.qr-code h1 {
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  text-transform: uppercase;
 }
