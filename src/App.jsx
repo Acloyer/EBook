@@ -19,15 +19,15 @@ function App() {
         <Route path='*' element={<Home />} />
         <Route path='home' element={<Home />} />
         <Route path='/authentication' element={<Authentication />} />
-        <Route path='/bookview' element={<Book />} />
-        <Route path='/Favorite' element={<Favorite/>} />
-        <Route path='/Shop' element={<Shop/>} />
-        <Route path='/Contact' element={<Contact/>} />
-        <Route path='/BookList' element={<BookList/>} />
-        <Route path='/BookEditor' element={<BookEditor/>} />
-        <Route path='/AddBook' element={<AddBook/>} />
-        <Route path='/Profile' element={<Profile/>} />
-        <Route path='/Basket' element={<Basket/>} />
+        <Route path='/book-view' element={<Book />} />
+        <Route path='/favorite' element={<Favorite/>} />
+        <Route path='/shop' element={<Shop/>} />
+        <Route path='/contact' element={<Contact/>} />
+        <Route path='/book-list' element={<BookList/>} />
+        <Route path='/book-editor' element={<BookEditor/>} />
+        <Route path='/add-book' element={<AddBook/>} />
+        <Route path='/profile' element={<Profile/>} />
+        <Route path='/basket' element={<Basket/>} />
       </Routes>
     </BrowserRouter>
   );
