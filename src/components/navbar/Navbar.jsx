@@ -7,6 +7,7 @@ import { ChevronDownOutline } from 'react-ionicons'
 import { ExitOutline } from 'react-ionicons'
 import { OptionsOutline } from 'react-ionicons'
 import { HeartOutline } from 'react-ionicons'
+import { Dropdown, DropdownToggle, DropdownItem } from "bootstrap-react";
 
 function Navbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -152,9 +153,18 @@ function Navbar() {
                                     </ul>
                                 </li>
                                 <li>    
-                                    <Link className="navbar-link" to='/book-list'>
+                                    <a href="#" className="navbar-link">AdminPanel</a>
+                                    <ul className="dropdown-menu animate__animated animate__bounceIn">
+                                        <li>
+                                            <Link to={`${config.frontendIP}/book-list`} className="navbar-link">Books</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={`${config.frontendIP}/genre-list`} className="navbar-link">Genres</Link>
+                                        </li>
+                                    </ul>
+                                    {/* <Link className="navbar-link" to='/book-list'>
                                         <p>AdminPanel</p>
-                                    </Link>
+                                    </Link> */}
                                 </li>
                                 <li>    
                                     <Link className="navbar-link" to='/contact'>
