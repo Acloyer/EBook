@@ -14,13 +14,15 @@ import Basket from './components/basket/Basket';
 import GenreList from './components/genre_list/GenreList';
 import GenreAdd from './components/genre_add/GenreAdd';
 import GenreEdit from './components/genre-edit/GenreEdit';
+import NotFound from './components/not_found_page/NotFound';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='*' element={<Home />} />
+        <Route path='*' element={<NotFound />} />
         <Route path='home' element={<Home />} />
+        <Route path='/' element={<Home />} />
         <Route path='/authentication' element={<Authentication />} />
         <Route path='/book-view' element={<Book />} />
         <Route path='/favorite' element={<Favorite/>} />
