@@ -13,7 +13,7 @@ function Basket() {
         const fetchCartItems = async () => {
             try {
                 const accessToken = getCookie("accessToken");
-                const response = await axios.get(`${config.backApi}/carts` {
+                const response = await axios.get(`${config.backApi}/carts`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
