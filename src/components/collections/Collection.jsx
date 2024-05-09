@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Card from "../card/Card";
+import config from "../../config";
 
 function Collection() {
     const [books, setBooks] = useState([]);
@@ -11,7 +12,7 @@ function Collection() {
 
     const fetchBooks = async () => {
         try {
-            const response = await axios.get("http://localhost:6060/api/v1/books?PageSize=8&PageNumber=1");
+            const response = await axios.get(`${config.backApi}/books?PageSize=8&PageNumber=1`);
             setBooks(response.data.items);
         } catch (error) {
             console.error("Error fetching books:", error);

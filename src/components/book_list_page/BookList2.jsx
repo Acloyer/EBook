@@ -1,18 +1,11 @@
 import axios from "axios";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
-//
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';  
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/saga-orange/theme.css';
-// import 'primereact/resources/themes/vela-orange/theme.css';
-// import 'primereact/resources/themes/arya-orange/theme.css';
-//
 import './flags.css';
-// import 'bulma/css/bulma.css';
-
-//
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
@@ -27,7 +20,7 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-
+import config from "../../config";
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -40,8 +33,8 @@ function BookList() {
 
     const fetchBooks = async () => {
         try {
-            // const response = await axios.get(`http://localhost:6060/api/v1/books?PageSize=${pageSize}&PageNumber=${currentPage}`); // пагинация самодельная
-            const response = await axios.get(`http://localhost:6060/api/v1/books?PageSize=${1000}`);
+            // const response = await axios.get(`${config.backApi}/books?PageSize=${pageSize}&PageNumber=${currentPage}`); // пагинация самодельная
+            const response = await axios.get(`${config.backApi}/books?PageSize=${1000}`);
             setBooks(response.data.items);
             setTotalPages(response.data.totalPages);
             setPageSize(response.data.pageSize);
@@ -75,7 +68,6 @@ function BookList() {
     };
 
 
-    // price DataTable
     let emptyBook = {
         id: null,
         title: '',
@@ -240,10 +232,6 @@ function BookList() {
         );
     };
 
-    // const rightToolbarTemplate = () => {
-    //     return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
-    // };
-
     const priceBodyTemplate = (rowData) => {
         return formatCurrency(rowData.price);
     };
@@ -286,65 +274,6 @@ function BookList() {
     );
     //
     return (
-        // <>
-        //     <Navbar />
-        //     <div className="content-wrapper animate__animated animate__zoomInUp">
-        //         <div className="container">
-        //             <div className="list-header">
-        //                 <h2>Book List</h2>
-        //                 <Link to='/AddBook'>
-        //                     <button className="btn btn-success mb-3 book-button">Add New Book</button>
-        //                 </Link>
-        //             </div>
-
-        //             <div className="card">
-        //                 <DataTable stripedRows value={books} showGridlines={true} tableStyle={{ minWidth: '50rem' }}>
-        //                     <Column field="title" header="Title" sortable  style={{ width: '10%', height: '50px' }}/>
-        //                     <Column field="author.pseudonym" header="Author" sortable  style={{ width: '10%' }}/>
-        //                     <Column field="genre.name" header="Genre" sortable style={{ width: '10%' }} />
-        //                     <Column field="language.name" header="Language" sortable  style={{ width: '10%' }}/>
-        //                     <Column field="pageCount" header="Page Count" sortable style={{ width: '10%' }} />
-        //                     <Column field="price" header="Price" sortable style={{ width: '10%' }} />
-        //                     <Column field="quantity" header="Quantity" sortable  style={{ width: '10%' }}/>
-        //                     <Column field="soldUnits" header="Sold Units" sortable  style={{ width: '10%' }}/>
-
-        //                     <Column style={{ width: '10%' }} header="ㅤㅤㅤActions" body={(rowData) => {
-        //                         return (
-        //                             <div className="book-buttons">
-        //                                 <Link to={'/BookEditor?' + rowData.id}>
-        //                                     <Button className="btn btn-primary mr-2 book-button" onClick={() => handleEdit(rowData.id)} />
-        //                                 </Link>
-        //                                 <Link to={''}>
-        //                                     {/* <Button icon={<FaRegTrashAlt/>} className="btn btn-danger" style={{ width: '35px', height: '35px'}}  /> */}
-        //                                     <IconField>
-        //                                         <InputIcon className="pi pi-trash"> </InputIcon>
-        //                                         <Button className="btn btn-danger" style={{ width: '35px', height: '35px'}} />
-        //                                     </IconField>
-        //                                     {/* icon={<FaRegTrashAlt/>}  */}
-        //                                 </Link>
-        //                             </div>
-        //                         );
-        //                     }} />
-        //                 </DataTable>
-        //             </div>
-
-        //             <nav>
-        //                 <ul className="pagination">
-        //                     <li className={`page-item ${!hasPrevious && 'disabled'}`}>
-        //                         <button className="page-link" onClick={handlePreviousPage}>Previous</button>
-        //                     </li>
-        //                     <li className="page-item disabled">
-        //                         <span className="page-link">{currentPage} of {totalPages}</span>
-        //                     </li>
-        //                     <li className={`page-item ${!hasNext && 'disabled'}`}>
-        //                         <button className="page-link" onClick={handleNextPage}>Next</button>
-        //                     </li>
-        //                 </ul>
-        //             </nav>
-        //         </div>
-        //     </div>
-        //     <Footer />
-        // </>
         <div>
             <Navbar/>
             <div className="flex flex-column md:flex-row justify-content-between my-5">
@@ -447,19 +376,6 @@ function BookList() {
                     {book && <span>Are you sure you want to delete the selected books?</span>}
                 </div>
             </Dialog>
-            {/* <nav>
-                <ul className="pagination">
-                    <li className={`page-item ${!hasPrevious && 'disabled'}`}>
-                        <button className="page-link" onClick={handlePreviousPage}>Previous</button>
-                    </li>
-                    <li className="page-item disabled">
-                        <span className="page-link">{currentPage} of {totalPages}</span>
-                    </li>
-                    <li className={`page-item ${!hasNext && 'disabled'}`}>
-                        <button className="page-link" onClick={handleNextPage}>Next</button>
-                    </li>
-                </ul>
-            </nav> */}
             <Footer/>
         </div>
     );

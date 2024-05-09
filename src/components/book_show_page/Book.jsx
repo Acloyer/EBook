@@ -3,6 +3,7 @@ import Navbar from "../navbar/Navbar";
 import BookCard from "../book_show/BookCard";
 import Footer from "../footer/Footer";
 import axios from "axios";
+import config from "../../config";
 
 function Book() {
     const [bookData, setBookData] = useState(null);
@@ -16,7 +17,7 @@ function Book() {
 
     const fetchBookData = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:6060/api/v1/books/${id}`);
+            const response = await axios.get(`${config.backApi}/books/${id}`);
             setBookData(response.data);
         } catch (error) {
             console.error("Error fetching book data:", error);

@@ -3,6 +3,7 @@ import axios from "axios";
 import Card from "../card/Card";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import config from "../../config";
 
 function Favorite() {
     const updateFavorites = () => {
@@ -26,7 +27,7 @@ function Favorite() {
 
     const fetchFavoriteBooks = async (accessToken) => {
         try {
-            const response = await axios.get("http://localhost:6060/api/v1/wisher", {
+            const response = await axios.get("${config.backApi}/wisher", {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

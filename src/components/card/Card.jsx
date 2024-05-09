@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { HeartOutline, HeartSharp } from 'react-ionicons'
 import { CartOutline, CartSharp } from 'react-ionicons'
 import axios from "axios";
+import config from "../../config";
 
 function Card({ imageSrc, category, title, description, price, id }) {
 
@@ -18,12 +19,12 @@ function Card({ imageSrc, category, title, description, price, id }) {
 
             if (accessToken && refreshToken) {
                 try {
-                    const cartResponse = await axios.get("http://localhost:6060/api/v1/carts", {
+                    const cartResponse = await axios.get(`${config.backApi}/carts`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
-                    const wishlistResponse = await axios.get("http://localhost:6060/api/v1/wisher", {
+                    const wishlistResponse = await axios.get(`${config.backApi}/wisher`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
@@ -68,14 +69,14 @@ function Card({ imageSrc, category, title, description, price, id }) {
             try {
                 if (isHeartClicked) {
                     console.log(`deleting heart : ${id}`)
-                    await axios.delete(`http://localhost:6060/api/v1/wisher/${id}`, {
+                    await axios.delete(`${config.backApi}/wisher/${id}`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
                 } else {
                     console.log(`putting heart : ${id}`)
-                    await axios.put(`http://localhost:6060/api/v1/wisher/${id}`, null, {
+                    await axios.put(`${config.backApi}/wisher/${id}`, null, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
@@ -103,7 +104,7 @@ function Card({ imageSrc, category, title, description, price, id }) {
         if (accessToken && refreshToken) {
             try {
                 if (isCartClicked) {
-                    const cartResponse = await axios.get("http://localhost:6060/api/v1/carts", {
+                    const cartResponse = await axios.get(`${config.backApi}/carts`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
@@ -111,7 +112,7 @@ function Card({ imageSrc, category, title, description, price, id }) {
                     const cartId = cartResponse.data.items.find(item => item.book.id === id)?.id;
                     console.log(cartId);
                     console.log(`deleting cart : ${id}`);
-                    await axios.delete(`http://localhost:6060/api/v1/carts/items/${cartId}`, {
+                    await axios.delete(`${config.backApi}/carts/items/${cartId}`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
@@ -119,7 +120,7 @@ function Card({ imageSrc, category, title, description, price, id }) {
                     setIsCartClicked(false);
                 } else {
                     console.log(`posting cart: ${id}`);
-                    await axios.post(`http://localhost:6060/api/v1/carts/${id}`, null, {
+                    await axios.post(`${config.backApi}/carts/${id}`, null, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
@@ -141,7 +142,7 @@ function Card({ imageSrc, category, title, description, price, id }) {
 
     return (
         <div className="product-card">
-            <div className="product-tumb" onClick={() => window.location.href = `http://localhost:3000/book-view?id=${id}`}>
+            <div className="product-tumb" onClick={() => window.location.href = `${config.frontendIP}/book-view?id=${id}`}>
                 <img src={imageSrc} alt={title} />
             </div>
             <div className="product-details">

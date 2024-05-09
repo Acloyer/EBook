@@ -4,6 +4,7 @@ import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import Card from "../card/Card";
 import { Row, Col } from "react-bootstrap";
+import config from "../../config";
 
 function Shop() {
     const [books, setBooks] = useState([]);
@@ -26,7 +27,7 @@ function Shop() {
     const fetchBooks = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:6060/api/v1/books`, {
+            const response = await axios.get(`${config.backApi}/books`, {
                 params: {
                     ...filters,
                     PageNumber: currentPage,
@@ -42,7 +43,6 @@ function Shop() {
         }
     };
 
-    // Функция для получения значения параметра из URL
     const getUrlSearchParameter = (name) => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);

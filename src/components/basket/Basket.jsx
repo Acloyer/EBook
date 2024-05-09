@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Row, Col } from 'react-bootstrap';
-import Card from '../card/Card'; // Импортируйте ваш компонент Card
+import Card from '../card/Card';
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import config from "../../config";
 
 function Basket() {
     const [cartItems, setCartItems] = useState([]);
@@ -12,7 +13,7 @@ function Basket() {
         const fetchCartItems = async () => {
             try {
                 const accessToken = getCookie("accessToken");
-                const response = await axios.get("http://localhost:6060/api/v1/carts", {
+                const response = await axios.get(`${config.backApi}/carts` {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
