@@ -11,6 +11,9 @@ import BookEditor from './components/books_list_for_admin/BookEditor';
 import AddBook from './components/add_book_page/AddBook';
 import Profile from './components/Profile/Profile';
 import Basket from './components/basket/Basket';
+import GenreList from './components/genre_list/GenreList';
+import GenreAdd from './components/genre_add/GenreAdd';
+import GenreEdit from './components/genre-edit/GenreEdit';
 
 function App() {
   return (
@@ -24,10 +27,13 @@ function App() {
         <Route path='/shop' element={<Shop/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/book-list' element={<BookList/>} />
-        <Route path='/book-editor' element={<BookEditor/>} />
+        <Route path='/book-edit' element={<BookEditor/>} />
         <Route path='/add-book' element={<AddBook/>} />
         <Route path='/profile' element={<Profile/>} />
         <Route path='/basket' element={<Basket/>} />
+        <Route path='/genre-add' element={<GenreAdd/>} />
+        <Route path='/genre-edit' element={<GenreEdit/>} />
+        <Route path='/genre-list' element={<GenreList/>} />
       </Routes>
     </BrowserRouter>
   );
