@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
-import Cookies from 'js-cookie'; // Импорт библиотеки js-cookie
-import config from "../../config"; // Импорт констант из config.js, апишек и url
+import Cookies from 'js-cookie';
+import config from "../../config";
 
 function Authentication() {
     const [loginChecked, setLoginChecked] = React.useState(false);
