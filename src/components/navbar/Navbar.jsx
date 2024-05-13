@@ -162,9 +162,6 @@ function Navbar() {
                                             <Link to={`${config.frontendIP}/genre-list`} className="navbar-link">Genres</Link>
                                         </li>
                                     </ul>
-                                    {/* <Link className="navbar-link" to='/book-list'>
-                                        <p>AdminPanel</p>
-                                    </Link> */}
                                 </li>
                                 <li>    
                                     <Link className="navbar-link" to='/contact'>
@@ -179,9 +176,13 @@ function Navbar() {
                                                     <div className="item-counter">
                                                         <p>0</p>
                                                     </div>
-                                                    <BasketOutline className="basket-icon"
-                                                        height="auto"
-                                                        width="30px" />
+                                                    <Link className="navbar-link" to='/basket'>
+                                                        <BasketOutline
+                                                            color={'#00000'}
+                                                            className="basket-icon"
+                                                            height="auto"
+                                                            width="30px" />
+                                                    </Link>
                                                 </div>
                                                 <div className="favorites">
                                                     <Link className="navbar-link" to='/favorite'>
@@ -205,12 +206,25 @@ function Navbar() {
                                                 onMouseEnter={handleMouseEnter}
                                                 onMouseLeave={handleMouseLeave}
                                                 >
-                                                <ChevronDownOutline className="shape" height="auto" width="25px"/>
+                                                <ChevronDownOutline 
+                                                    className="shape"
+                                                    height="auto"
+                                                    width="25px"/>
                                                 {dropdownOpen && (
                                                     <div className="shape-dropdown">
                                                         <ul className="animate__animated animate__bounceIn">
-                                                            <li><a className="navbar-link shape-link" href="/Profile"><OptionsOutline /></a></li>
-                                                            <li><a className="shape-link" onClick={logout}><ExitOutline /></a></li>
+                                                            <li>
+                                                                <a className="navbar-link shape-link" href="/Profile">
+                                                                    <OptionsOutline 
+                                                                        color={'#00000'}/>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a className="navbar-link shape-link" href="#" onClick={logout}>
+                                                                    <ExitOutline 
+                                                                        color={'#00000'}/>
+                                                                </a>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 )}
@@ -229,7 +243,7 @@ function Navbar() {
                                                     />
                                                 </Link>
                                             </div>
-                                            <span class="material-symbols-outlined">
+                                            <span className="material-symbols-outlined">
                                                 <Link className="navbar-auth" to='/Authentication'>
                                                     <a>person_add</a>
                                                 </Link>
