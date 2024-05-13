@@ -36,7 +36,7 @@ function Basket() {
     return (
         <>
             <Navbar/>
-            <Container>
+            <Container className="content-wrapper animate__animated animate__zoomInUp">
                 <h1>Shopping Cart</h1>
                 <Row>
                     {cartItems.map((item) => (
