@@ -28,7 +28,7 @@ function Shop() {
                 if (searchTerm) {
                     url += `&Title=${searchTerm}`;
                 }
-
+                console.log('url:' + url)
                 const response = await axios.get(url);
                 setBooks(response.data.items);
                 setTotalCount(response.data.totalCount);
@@ -46,7 +46,11 @@ function Shop() {
             <hr className="container animate__animated animate__zoomInDown"/>
             <div className="col-md-3 container" style={{padding: "0px 0px 0px 20px"}}>
                 {search && search !== "" && <p>Поиск по: {search}...</p>}
-                {totalCount && totalCount !== 0 && <p>Всего найдено книг: {totalCount}</p>}
+                {totalCount !== undefined && totalCount !== 0 ? (
+                    <p>Всего найдено книг: {totalCount}</p>
+                ) : (
+                    <p>Книги не найдены</p>
+                )}
             </div>
             <div className="container animate__animated animate__zoomInDown">
                 <div className="row">
