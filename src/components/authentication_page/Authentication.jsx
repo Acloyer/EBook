@@ -86,9 +86,9 @@ function Authentication() {
                             <label className="form-label" htmlFor="chk" aria-hidden="true">
                                 Sign up
                             </label>
-                            {responseStatus === 400 && <p>Error Detail: {errorDetail}</p>}
+                            {/* {responseStatus === 400 && <p>Error Detail: {errorDetail}</p>}
                             {responseStatus === 500 && <p>Ошибка c БД</p>}
-                            {responseStatus === 200 && <p>Регистрация прошла успешно. Проверьте свою почту для верификации почты</p>}
+                            {responseStatus === 200 && <p>Регистрация прошла успешно. Проверьте свою почту для верификации почты</p>} */}
                             <input
                                 className="form-input"
                                 type="text"
@@ -140,14 +140,14 @@ function Authentication() {
                             <label className="form-label" htmlFor="chk" aria-hidden="true">
                                 Login
                             </label>
-                            {responseStatus === 400 && <p>Error Detail: {errorDetail}</p>}
+                            {/* {responseStatus === 400 && <p>Error Detail: {errorDetail}</p>}
                             {responseStatus === 200 && tokens && (
                                 <div>
                                     <p>Tokens:</p>
                                     <p>Access Token: {tokens.token}</p>
                                     <p>Refresh Token: {tokens.refreshToken}</p>
                                 </div>
-                            )}
+                            )} */}
                             <input
                                 className="form-input"
                                 type="email"
