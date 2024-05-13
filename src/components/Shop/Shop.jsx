@@ -1,185 +1,70 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import Navbar from "../navbar/Navbar";
-// import Footer from "../footer/Footer";
-// import Card from "../card/Card";
-// import { Row, Col } from "react-bootstrap";
-// import config from "../../config";
-
-// function Shop() {
-//     const [books, setBooks] = useState([]);
-//     const [currentPage, setCurrentPage] = useState(1);
-//     const [totalPages, setTotalPages] = useState(0);
-//     const [loading, setLoading] = useState(true);
-//     const [filters, setFilters] = useState({
-//         PageSize: 3,
-//     });
-
-//     useEffect(() => {
-//         if (Object.values(filters).some(value => value !== "")) {
-//             fetchBooks();
-//         } else {
-//             setBooks([]);
-//             setTotalPages(0);
-//         }
-//     }, [currentPage, filters]);
-
-//     const fetchBooks = async () => {
-//         setLoading(true);
-//         try {
-//             const response = await axios.get(`${config.backApi}/books`, {
-//                 params: {
-//                     ...filters,
-//                     PageNumber: currentPage,
-//                     Title: getUrlSearchParameter("search")
-//                 }
-//             });
-//             setBooks(response.data.items);
-//             setTotalPages(response.data.totalPages);
-//         } catch (error) {
-//             console.error("Error fetching books:", error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     const getUrlSearchParameter = (name) => {
-//         const urlParams = new URLSearchParams(window.location.search);
-//         return urlParams.get(name);
-//     };
-
-//     const handlePageChange = (page) => {
-//         setCurrentPage(page);
-//     };
-
-//     const handleFilterChange = (e) => {
-//         const { name, value } = e.target;
-//         setFilters({
-//             ...filters,
-//             [name]: value
-//         });
-//     };
-
-//     const handleSearch = () => {
-//         const url = `/Shop`;
-//         window.location.href = url;
-//     };
-
-//     const handleNextPage = () => {
-//         if (hasNext) {
-//             setCurrentPage(currentPage + 1);
-//         }
-//     };
-
-//     const handlePreviousPage = () => {
-//         if (hasPrevious) {
-//             setCurrentPage(currentPage - 1);
-//         }
-//     };
-
-//     const hasNext = currentPage < totalPages;
-//     const hasPrevious = currentPage > 1;
-
-//     return (
-//         <div>
-//             <Navbar />
-//             <div className="shop-container">
-//                 <Row>
-//                     <Col md={3} className="leftside">
-//                         <div className="filters">
-//                             <h2>Filters</h2>
-//                             <div>
-//                                 <label htmlFor="pageSize">Page Size:</label>
-//                                 <input type="number" id="pageSize" name="PageSize" value={filters.PageSize} onChange={handleFilterChange} />
-//                             </div>
-//                             <div>
-//                                 <label htmlFor="minPrice">Min price:</label>
-//                                 <input type="number" id="minPrice" name="MinPrice" value={filters.MinPrice} onChange={handleFilterChange} />
-//                             </div>
-//                             <div>
-//                                 <label htmlFor="maxPrice">Max price:</label>
-//                                 <input type="number" id="maxPrice" name="MaxPrice" value={filters.MaxPrice} onChange={handleFilterChange} />
-//                             </div>
-//                             <button onClick={handleSearch}>Search</button>
-//                         </div>
-//                     </Col>
-//                     <Col md={9} className="rightside">
-//                         <section>
-//                             <div className="container">
-//                                 <div className="row">
-//                                     {loading ? (
-//                                         <p>Loading...</p>
-//                                     ) : books.length ? (
-//                                         <>
-//                                             {books.map((book) => (
-//                                                 <Col md={3} key={book.id}>
-//                                                     <Card
-//                                                         imageSrc={book.posterUrl}
-//                                                         category={book.genre.name}
-//                                                         title={book.title}
-//                                                         description={book.description}
-//                                                         price={book.price}
-//                                                         id={book.id}
-//                                                     />
-//                                                 </Col>
-//                                             ))}
-//                                             <nav>
-//                                                 <ul className="pagination">
-//                                                     <li className={`page-item ${!hasPrevious && 'disabled'}`}>
-//                                                         <button className="page-link" onClick={handlePreviousPage}>Previous</button>
-//                                                     </li>
-//                                                     <li className="page-item disabled">
-//                                                         <span className="page-link">{currentPage} of {totalPages}</span>
-//                                                     </li>
-//                                                     <li className={`page-item ${!hasNext && 'disabled'}`}>
-//                                                         <button className="page-link" onClick={handleNextPage}>Next</button>
-//                                                     </li>
-//                                                 </ul>
-//                                             </nav>
-//                                         </>
-//                                     ) : (
-//                                         <p>No books found.</p>
-//                                     )}
-//                                 </div>
-//                             </div>
-//                         </section>
-//                     </Col>
-//                 </Row>
-//             </div>
-//             <Footer />
-//         </div>
-//     );
-// }
-
-// export default Shop;
-
-import React from "react";
 import Card from "../card/Card";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
+import config from "../../config";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function Shop() {
-    const cardData = {
-        imageSrc: "book-4.png",
-        category: "Action",
-        title: "Some Book",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, possimus nostrum!",
-        price: "12.99"
-    };
+    const location = useLocation();
+    const [books, setBooks] = useState([]);
+    const [search, setSearch] = useState("");
+    const [totalCount, setTotalCount] = useState(0);
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const searchTerm = new URLSearchParams(location.search).get("search");
+                setSearch(searchTerm);
+
+                let url = `${config.backApi}/books?PageSize=5`;
+
+                const genreId = new URLSearchParams(location.search).get("GenreId");
+                if (genreId) {
+                    url += `&GenreId=${genreId}`;
+                }
+
+                if (searchTerm) {
+                    url += `&Title=${searchTerm}`;
+                }
+
+                const response = await axios.get(url);
+                setBooks(response.data.items);
+                setTotalCount(response.data.totalCount);
+            } catch (error) {
+                console.error("Error fetching books:", error);
+            }
+        };
+
+        fetchBooks();
+    }, [location.search]);
 
     return (
         <>
-        <Navbar/>
+            <Navbar />
+            <hr className="container animate__animated animate__zoomInDown"/>
+            <div className="col-md-3 container" style={{padding: "0px 0px 0px 20px"}}>
+                {search && search !== "" && <p>Поиск по: {search}...</p>}
+                {totalCount && totalCount !== 0 && <p>Всего найдено книг: {totalCount}</p>}
+            </div>
             <div className="container animate__animated animate__zoomInDown">
                 <div className="row">
-                    {Array.from({ length: 15}).map((_, index) => (
+                    {books.map((book, index) => (
                         <div className="col-md-3" key={index}>
-                            <Card {...cardData} />
+                            <Card
+                                imageSrc={book.posterUrl}
+                                category={book.category}
+                                title={book.title}
+                                description={book.description}
+                                price={book.price}
+                                id={book.id}
+                            />
                         </div>
                     ))}
                 </div>
             </div>
-        <Footer/>
+            <Footer />
         </>
     );
 }
