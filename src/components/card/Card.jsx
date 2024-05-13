@@ -5,7 +5,7 @@ import { CartOutline, CartSharp } from 'react-ionicons'
 import axios from "axios";
 import config from "../../config";
 
-function Card({ imageSrc, category, title, description, price, id }) {
+function Card({ imageSrc, category, title, description, price, id}) {
 
     const [isHeartHovered, setIsHeartHovered] = useState(false);
     const [isHeartClicked, setIsHeartClicked] = useState(false);
@@ -143,6 +143,7 @@ function Card({ imageSrc, category, title, description, price, id }) {
     return (
         <div className="product-card">
             <div className="product-tumb" onClick={() => window.location.href = `${config.frontendIP}/book-view?id=${id}`}>
+                {console.log()}
                 <img src={imageSrc} alt={title} />
             </div>
             <div className="product-details">
