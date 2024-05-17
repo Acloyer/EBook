@@ -39,6 +39,9 @@ function Book() {
                     copiesNum={bookData.quantity}
                     soldCopies={bookData.soldUnits}
                     language={bookData.language.name}
+                    genre_id={bookData.genre.id}
+                    author_id={bookData.author.id}
+                    language_id={bookData.language.id}
                 />
             )}
             <Footer />
