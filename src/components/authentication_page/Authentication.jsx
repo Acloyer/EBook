@@ -45,6 +45,7 @@ function Authentication() {
             }
             setResponseStatus(error.response.status);
         }
+        console.log(responseStatus);
     };
 
     const handleLoginSubmit = async (e) => {
@@ -53,7 +54,7 @@ function Authentication() {
             const response = await axios.post(`${config.backApi}/users/login`, formData);
             setResponseStatus(response.status);
             if (response.status === 200) {
-                window.location.href = home;    
+                window.location.href = home;
                 setTokens(response.data);
                 Cookies.set('accessToken', response.data.token);
                 Cookies.set('refreshToken', response.data.refreshToken);
@@ -86,9 +87,6 @@ function Authentication() {
                             <label className="form-label" htmlFor="chk" aria-hidden="true">
                                 Sign up
                             </label>
-                            {/* {responseStatus === 400 && <p>Error Detail: {errorDetail}</p>}
-                            {responseStatus === 500 && <p>Ошибка c БД</p>}
-                            {responseStatus === 200 && <p>Регистрация прошла успешно. Проверьте свою почту для верификации почты</p>} */}
                             <input
                                 className="form-input"
                                 type="text"
@@ -140,14 +138,6 @@ function Authentication() {
                             <label className="form-label" htmlFor="chk" aria-hidden="true">
                                 Login
                             </label>
-                            {/* {responseStatus === 400 && <p>Error Detail: {errorDetail}</p>}
-                            {responseStatus === 200 && tokens && (
-                                <div>
-                                    <p>Tokens:</p>
-                                    <p>Access Token: {tokens.token}</p>
-                                    <p>Refresh Token: {tokens.refreshToken}</p>
-                                </div>
-                            )} */}
                             <input
                                 className="form-input"
                                 type="email"
@@ -171,6 +161,19 @@ function Authentication() {
                     </div>
                 </div>
             </div>
+
+            <div className="response">
+            {responseStatus === 200 ? (
+                <p>Registration was successful. Check your email for mail verification</p>
+            ) : responseStatus === 500 ? (
+                <p style={{color: "red"}}>Error 500: {errorDetail}</p>
+            ) : responseStatus === 400 ? (
+                <p style={{color: "red"}}>Error 400: {errorDetail}</p>
+            ) : (
+                <p></p>
+            )}
+            </div>
+
             <Footer />
         </>
     );
