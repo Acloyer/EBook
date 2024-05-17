@@ -52,8 +52,12 @@ function Navbar() {
                         setUserInfo({
                             firstName: decodedToken.given_name,
                             lastName: decodedToken.family_name,
-                            email: decodedToken.email
+                            email: decodedToken.email,
+                            status: decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
                         });
+                        // status out
+                        console.log(userInfo.status)
+                        //
                     } else {
                         logout();
                     }
@@ -95,7 +99,6 @@ function Navbar() {
         }
     };
     //
-    
     return (
         <>
             <div className="animate__animated animate__zoomInDown">
@@ -152,17 +155,19 @@ function Navbar() {
                                         ))}
                                     </ul>
                                 </li>
-                                <li>    
-                                    <a href="#" className="navbar-link">AdminPanel</a>
-                                    <ul className="dropdown-menu animate__animated animate__bounceIn">
-                                        <li>
-                                            <Link to={`${config.frontendIP}/book-list`} className="navbar-link">Books</Link>
-                                        </li>
-                                        <li>
-                                            <Link to={`${config.frontendIP}/genre-list`} className="navbar-link">Genres</Link>
-                                        </li>
-                                    </ul>
-                                </li>
+                                {isLoggedIn && userInfo.status !== "User" && (
+                                    <li>
+                                        <a href="#" className="navbar-link">AdminPanel</a>
+                                        <ul className="dropdown-menu animate__animated animate__bounceIn">
+                                            <li>
+                                                <Link to={`${config.frontendIP}/book-list`} className="navbar-link">Books</Link>
+                                            </li>
+                                            <li>
+                                                <Link to={`${config.frontendIP}/genre-list`} className="navbar-link">Genres</Link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                )}
                                 <li>    
                                     <Link className="navbar-link" to='/contact'>
                                         <p>Contact</p>
@@ -235,7 +240,7 @@ function Navbar() {
                                     <li>
                                         <div className="nav-icons" style={{padding: "0px 400px"}}>
                                             <div className="favorites">
-                                                <Link className="navbar-link" to='/favorite'>
+                                                <Link className="navbar-link" to='/'>
                                                     <HeartOutline
                                                         color={'#00000'}
                                                         height="auto"
