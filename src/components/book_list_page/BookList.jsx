@@ -27,9 +27,9 @@ function BookList() {
         try {
             const response = await axios.get(`${config.backApi}/books?PageSize=${pageSize}&PageNumber=${currentPage}`);
             setBooks(response.data.items);
+            setTotalCount(response.data.totalCount);
             setTotalPages(response.data.totalPages);
             setPageSize(response.data.pageSize);
-            setTotalCount(response.data.totalCount);
             setHasPrevious(response.data.hasPrevious);
             setHasNext(response.data.hasNext);
 
@@ -98,12 +98,12 @@ function BookList() {
                                 return (
                                     <div className="book-buttons">
                                         <ButtonGroup >
-                                            <Button className="btn btn-outline-primary">
+                                            <Button className="btn btn-outline-primary btn-sm">
                                                 <Link to={`/book-edit?id=${rowData.id}`}>
                                                     <FaPencilAlt />
                                                 </Link>
                                             </Button>
-                                            <Button className="btn btn-outline-danger" onClick={() => handleDeleteBook(rowData.id)}>
+                                            <Button className="btn btn-outline-danger btn-sm" onClick={() => handleDeleteBook(rowData.id)}>
                                                 <FaTrash />
                                             </Button>
                                         </ButtonGroup>
@@ -112,7 +112,7 @@ function BookList() {
                             }} />
                         </DataTable>
                     </div>
-                    <nav>
+                    <nav className="d-flex justify-content-center">
                         <ul className="pagination">
                             <li className={`page-item ${!hasPrevious && 'disabled'}`}>
                                 <button className="page-link" onClick={handlePreviousPage}>Previous</button>
