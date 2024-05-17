@@ -11,6 +11,10 @@ function Shop() {
     const [books, setBooks] = useState([]);
     const [search, setSearch] = useState("");
     const [totalCount, setTotalCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [hasPrevious, setHasPrevious] = useState(false);
+    const [hasNext, setHasNext] = useState(false);
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -18,7 +22,7 @@ function Shop() {
                 const searchTerm = new URLSearchParams(location.search).get("search");
                 setSearch(searchTerm);
 
-                let url = `${config.backApi}/books?PageSize=5`;
+                let url = `${config.backApi}/books?PageSize=8&page=${currentPage}`;
 
                 const genreId = new URLSearchParams(location.search).get("GenreId");
                 if (genreId) {
@@ -28,23 +32,34 @@ function Shop() {
                 if (searchTerm) {
                     url += `&Title=${searchTerm}`;
                 }
-                console.log('url:' + url)
+
                 const response = await axios.get(url);
                 setBooks(response.data.items);
                 setTotalCount(response.data.totalCount);
+                setTotalPages(response.data.totalPages);
+                setHasPrevious(response.data.hasPrevious);
+                setHasNext(response.data.hasNext);
             } catch (error) {
                 console.error("Error fetching books:", error);
             }
         };
 
         fetchBooks();
-    }, [location.search]);
+    }, [location.search, currentPage]);
+
+    const handlePreviousPage = () => {
+        setCurrentPage(currentPage - 1);
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
 
     return (
         <>
             <Navbar />
-            <hr className="container animate__animated animate__zoomInDown"/>
-            <div className="col-md-3 container" style={{padding: "0px 0px 0px 20px"}}>
+            <hr className="container animate__animated animate__zoomInDown" />
+            <div className="col-md-3 container animate__animated animate__zoomInDown" style={{ padding: "0px 0px 0px 20px" }}>
                 {search && search !== "" && <p>Поиск по: {search}...</p>}
                 {totalCount !== undefined && totalCount !== 0 ? (
                     <p>Всего найдено книг: {totalCount}</p>
@@ -67,6 +82,19 @@ function Shop() {
                         </div>
                     ))}
                 </div>
+                <nav className="d-flex justify-content-center">
+                    <ul className="pagination">
+                        <li className={`page-item ${!hasPrevious && 'disabled'}`}>
+                            <button className="page-link" onClick={handlePreviousPage}>Previous</button>
+                        </li>
+                        <li className="page-item disabled">
+                            <span className="page-link">{currentPage} of {totalPages}</span>
+                        </li>
+                        <li className={`page-item ${!hasNext && 'disabled'}`}>
+                            <button className="page-link" onClick={handleNextPage}>Next</button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <Footer />
         </>
