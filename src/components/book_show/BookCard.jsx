@@ -27,13 +27,13 @@ function BookCard({ imageSrc, category, title, description, price, author, pages
                     <div className="book-info text-center">
                         <h1>{title}</h1>
                         <p>
-                            Genre: <Link to={`${config.frontendIP}/shop?genreId=${category}`}>{category}</Link>
+                            Genre: <Link to={`${config.frontendIP}/shop?genreId=${genre_id}`}>{category}</Link>
                         </p>
                         <p>
-                            Author: <Link to={`${config.frontendIP}/shop?authorId=${author}`}>{author}</Link>
+                            Author: <Link to={`${config.frontendIP}/shop?authorId=${author_id}`}>{author}</Link>
                         </p>
                         <p>
-                            Language: <Link to={`${config.frontendIP}/shop?languageId=${language}`}>{language}</Link>
+                            Language: <Link to={`${config.frontendIP}/shop?languageId=${language_id}`}>{language}</Link>
                         </p>
                         <p>Number of Pages: {pagesNum}</p>
                         <p>Price: {price}</p>
