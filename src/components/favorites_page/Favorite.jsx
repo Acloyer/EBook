@@ -27,7 +27,7 @@ function Favorite() {
 
     const fetchFavoriteBooks = async (accessToken) => {
         try {
-            const response = await axios.get("${config.backApi}/wisher", {
+            const response = await axios.get(`${config.backApi}/wisher`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -51,26 +51,27 @@ function Favorite() {
             <Navbar />
             <section className="section featured animate__animated animate__zoomInUp" aria-label="featured collection">
                 <div className="container">
-                    <div className="row" style={{margin: "10px", display: "flex", width: "100%", flexDirection: "row", justifyContent: "center"}}>
-                    {loading ? (
-                    <p>Loading...</p>
-                    ) : favoriteBooks.length ? (
-                        favoriteBooks.map((book, index) => (
-                            <div className="col-md-3" key={index}>
-                                <Card
-                                    imageSrc={book.book.posterUrl}
-                                    category={book.book.category}
-                                    title={book.book.title}
-                                    description={book.book.description}
-                                    price={book.book.price}
-                                    id={book.book.id}
-                                    updateFavorites={updateFavorites}
-                                />
-                            </div>
-                        ))
-                    ) : (
-                        <h1>No favorite books found.</h1>
-                    )}
+                    <div className="row" style={{flexDirection: "row", justifyContent: "center"}}>
+                        {loading ? (
+                            <p>Loading...</p>
+                            // <h1>Favorite books:</h1>
+                        ) : favoriteBooks.length ? (
+                                favoriteBooks.map((book, index) => (
+                                    <div className="col-md-3" key={index}>
+                                        <Card
+                                            imageSrc={book.book.posterUrl}
+                                            category={book.book.category}
+                                            title={book.book.title}
+                                            description={book.book.description}
+                                            price={book.book.price}
+                                            id={book.book.id}
+                                            updateFavorites={updateFavorites}
+                                        />
+                                    </div>
+                                ))
+                        ) : (
+                            <h1>No favorite books found.</h1>
+                        )}
                     </div>
                 </div>
             </section>
