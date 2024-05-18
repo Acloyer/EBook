@@ -16,9 +16,15 @@ function Authentication() {
         lastName: "",
         returnUrl: home
     });
+    // registration response
     const [responseStatus, setResponseStatus] = useState(null);
     const [errorDetail, setErrorDetail] = useState("");
     const [tokens, setTokens] = useState(null);
+
+    // login response
+    const [loginResponseStatus, setLoginResponseStatus] = useState(null);
+    const [loginErrorDetail, setLoginErrorDetail] = useState("");
+    const [loginTokens, setLoginTokens] = useState(null);
 
     const handleLoginCheckboxChange = () => {
         setLoginChecked(!loginChecked);
@@ -52,20 +58,20 @@ function Authentication() {
         e.preventDefault();
         try {
             const response = await axios.post(`${config.backApi}/users/login`, formData);
-            setResponseStatus(response.status);
+            setLoginResponseStatus(response.status);
             if (response.status === 200) {
                 window.location.href = home;
-                setTokens(response.data);
+                setLoginTokens(response.data);
                 Cookies.set('accessToken', response.data.token);
                 Cookies.set('refreshToken', response.data.refreshToken);
             }
         } catch (error) {
             if (error.response.status === 400 && error.response.data.detail) {
-                setErrorDetail(error.response.data.detail);
+                setLoginErrorDetail(error.response.data.detail);
             } else {
-                setErrorDetail("An unexpected error occurred.");
+                setLoginErrorDetail("An unexpected error occurred.");
             }
-            setResponseStatus(error.response.status);
+            setLoginResponseStatus(error.response.status);
         }
     };
 
@@ -169,6 +175,15 @@ function Authentication() {
                 <p style={{color: "red"}}>Error 500: {errorDetail}</p>
             ) : responseStatus === 400 ? (
                 <p style={{color: "red"}}>Error 400: {errorDetail}</p>
+            ) : (
+                <p></p>
+            )}
+            {loginResponseStatus === 200 ? (
+                <p>Login was successful.</p>
+            ) : loginResponseStatus === 500 ? (
+                <p style={{color: "red"}}>Error 500: {loginErrorDetail}</p>
+            ) : loginResponseStatus === 400 ? (
+                <p style={{color: "red"}}>Error 400: {loginErrorDetail}</p>
             ) : (
                 <p></p>
             )}
