@@ -24,6 +24,7 @@ function Card({ imageSrc, category, title, description, price, id}) {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
+
                     const wishlistResponse = await axios.get(`${config.backApi}/wisher`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
@@ -41,8 +42,8 @@ function Card({ imageSrc, category, title, description, price, id}) {
 
                     setIsHeartClicked(isInWishlist);
                     
-                    console.log("isInCart: " + isInCart)
-                    console.log("isInWishlist: " + isInWishlist)
+                    // console.log("isInCart: " + isInCart)
+                    // console.log("isInWishlist: " + isInWishlist)
                 } catch (error) {
                     console.error("Error fetching data:", error);
                 }
@@ -97,11 +98,48 @@ function Card({ imageSrc, category, title, description, price, id}) {
         setIsCartHovered(false);
     };
 
+    // const handleCartClick = async () => {
+    //     const accessToken = getCookie("accessToken");
+    //     const refreshToken = getCookie("refreshToken");
+    
+    //     if (accessToken && refreshToken) {
+    //         try {
+    //             if (isCartClicked) {
+    //                 const cartResponse = await axios.get(`${config.backApi}/carts`, {
+    //                     headers: {
+    //                         Authorization: `Bearer ${accessToken}`
+    //                     }
+    //                 });
+    //                 const cartId = cartResponse.data.items.find(item => item.book.id === id)?.id;
+    //                 console.log(cartId);
+    //                 console.log(`deleting cart : ${id}`);
+    //                 await axios.delete(`${config.backApi}/carts/items/${cartId}`, {
+    //                     headers: {
+    //                         Authorization: `Bearer ${accessToken}`
+    //                     }
+    //                 });
+    //                 setIsCartClicked(false);
+    //             } else {
+    //                 console.log(`posting cart: ${id}`);
+    //                 await axios.post(`${config.backApi}/carts/${id}`, null, {
+    //                     headers: {
+    //                         Authorization: `Bearer ${accessToken}`
+    //                     }
+    //                 });
+    //                 setIsCartClicked(true);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error updating cart:", error);
+    //         }
+    //     }
+    // };
+
     const handleCartClick = async () => {
         const accessToken = getCookie("accessToken");
         const refreshToken = getCookie("refreshToken");
-    
+        
         if (accessToken && refreshToken) {
+            setIsCartClicked(prevState => !prevState);
             try {
                 if (isCartClicked) {
                     const cartResponse = await axios.get(`${config.backApi}/carts`, {
@@ -110,29 +148,27 @@ function Card({ imageSrc, category, title, description, price, id}) {
                         }
                     });
                     const cartId = cartResponse.data.items.find(item => item.book.id === id)?.id;
-                    console.log(cartId);
-                    console.log(`deleting cart : ${id}`);
                     await axios.delete(`${config.backApi}/carts/items/${cartId}`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
-                    setIsCartClicked(false);
+                    console.log(`deleted cart with cartId: ${cartId}`)
                 } else {
-                    console.log(`posting cart: ${id}`);
                     await axios.post(`${config.backApi}/carts/${id}`, null, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`
                         }
                     });
-                    setIsCartClicked(true);
+                    console.log(`posted cart: ${id}`)
                 }
             } catch (error) {
-                console.error("Error updating cart:", error);
+                setIsCartClicked(prevState => !prevState);
+                console.error("Error updating cartlist: ", error);
             }
         }
     };
-    
+
     
     const getCookie = (name) => {
         const value = `; ${document.cookie}`;
