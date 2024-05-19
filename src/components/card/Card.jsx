@@ -98,42 +98,6 @@ function Card({ imageSrc, category, title, description, price, id}) {
         setIsCartHovered(false);
     };
 
-    // const handleCartClick = async () => {
-    //     const accessToken = getCookie("accessToken");
-    //     const refreshToken = getCookie("refreshToken");
-    
-    //     if (accessToken && refreshToken) {
-    //         try {
-    //             if (isCartClicked) {
-    //                 const cartResponse = await axios.get(`${config.backApi}/carts`, {
-    //                     headers: {
-    //                         Authorization: `Bearer ${accessToken}`
-    //                     }
-    //                 });
-    //                 const cartId = cartResponse.data.items.find(item => item.book.id === id)?.id;
-    //                 console.log(cartId);
-    //                 console.log(`deleting cart : ${id}`);
-    //                 await axios.delete(`${config.backApi}/carts/items/${cartId}`, {
-    //                     headers: {
-    //                         Authorization: `Bearer ${accessToken}`
-    //                     }
-    //                 });
-    //                 setIsCartClicked(false);
-    //             } else {
-    //                 console.log(`posting cart: ${id}`);
-    //                 await axios.post(`${config.backApi}/carts/${id}`, null, {
-    //                     headers: {
-    //                         Authorization: `Bearer ${accessToken}`
-    //                     }
-    //                 });
-    //                 setIsCartClicked(true);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error updating cart:", error);
-    //         }
-    //     }
-    // };
-
     const handleCartClick = async () => {
         const accessToken = getCookie("accessToken");
         const refreshToken = getCookie("refreshToken");
@@ -162,6 +126,7 @@ function Card({ imageSrc, category, title, description, price, id}) {
                     });
                     console.log(`posted cart: ${id}`)
                 }
+                // window.location.reload();
             } catch (error) {
                 setIsCartClicked(prevState => !prevState);
                 console.error("Error updating cartlist: ", error);
