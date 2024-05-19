@@ -10,22 +10,41 @@ import { HeartOutline } from 'react-ionicons'
 import { Dropdown, DropdownToggle, DropdownItem } from "bootstrap-react";
 
 function Navbar() {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+    // get cookie etc
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    };
 
+    const decodeToken = (token) => {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(base64));
+    };
+
+    const logout = () => {
+        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        setIsLoggedIn(false);
+        setUserInfo(null);
+    };
+    //
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const handleMouseEnter = () => {
         setDropdownOpen(true);
     };
-
+    
     const handleMouseLeave = () => {
         setDropdownOpen(false);
     };
-
+    
     const [genres, setGenres] = useState([]);
-
+    
     useEffect(() => {
         fetchGenres();
     }, []);
-
+    
     const fetchGenres = async () => {
         try {
             const response = await axios.get(`${config.backApi}/genres`);
@@ -35,18 +54,38 @@ function Navbar() {
         }
     };
 
+    // логика получения "сколько предметов в корзине"
+
+    const [totalItemsCart, setTotalItemsCart] = useState(0);
+    const fetchTotalItemsCart = async () => {
+        try{
+            const accessToken = getCookie("accessToken");
+            const response = await axios.get(`${config.backApi}/carts/book-quantity`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            setTotalItemsCart(response.data);
+
+        } catch (error) {
+            console.error("Error fetching items in the cart: ", error);
+        }
+    }
+    fetchTotalItemsCart();
+    
+    //
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
-
+    
     useEffect(() => {
         const checkAuthentication = async () => {
             const accessToken = getCookie("accessToken");
             const refreshToken = getCookie("refreshToken");
-
+            
             if (accessToken && refreshToken) {
                 try {
                     const decodedToken = decodeToken(accessToken);
-
+                    
                     if (decodedToken.exp * 1000 > Date.now()) {
                         setIsLoggedIn(true);
                         setUserInfo({
@@ -70,26 +109,8 @@ function Navbar() {
         checkAuthentication();
     }, []);
 
-    const getCookie = (name) => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(";").shift();
-    };
 
-    const decodeToken = (token) => {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        return JSON.parse(atob(base64));
-    };
-
-    const logout = () => {
-        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        setIsLoggedIn(false);
-        setUserInfo(null);
-    };
-
-    //
+    // search
     const [searchValue, setSearchValue] = useState('');
 
     const handleSearch = () => {
@@ -99,6 +120,7 @@ function Navbar() {
         }
     };
     //
+
     return (
         <>
             <div className="animate__animated animate__zoomInDown">
@@ -179,7 +201,7 @@ function Navbar() {
                                             <div className="user-icons">
                                                 <div className="basket">
                                                     <div className="item-counter">
-                                                        <p>0</p>
+                                                        <p>{totalItemsCart}</p>
                                                     </div>
                                                     <Link className="navbar-link" to='/basket'>
                                                         <BasketOutline
