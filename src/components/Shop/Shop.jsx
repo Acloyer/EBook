@@ -95,7 +95,7 @@ function Shop() {
                         <div className="col-md-3" key={index}>
                             <Card
                                 imageSrc={book.posterUrl}
-                                category={book.category}
+                                category={book.genre.name}
                                 title={book.title}
                                 description={book.description}
                                 price={book.price}
