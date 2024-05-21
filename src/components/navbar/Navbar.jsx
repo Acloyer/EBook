@@ -179,7 +179,7 @@ function Navbar() {
                                 </li>
                                 {isLoggedIn && userInfo.status !== "User" && (
                                     <li>
-                                        <a href="#" className="navbar-link">AdminPanel</a>
+                                        <a href="#" className="navbar-link">Admin</a>
                                         <ul className="dropdown-menu animate__animated animate__bounceIn">
                                             <li>
                                                 <Link to={`${config.frontendIP}/book-list`} className="navbar-link">Books</Link>
