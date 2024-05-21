@@ -3,12 +3,11 @@ import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
 import axios from "axios";
 import config from "../../config";
+import { Link } from "react-router-dom";
 
 function Profile() {
     const [userInfo, setUserInfo] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    
-    //    
 
     const getCookie = (name) => {
         const value = `; ${document.cookie}`;
@@ -19,6 +18,7 @@ function Profile() {
     const decodeToken = (token) => {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        console.log('json parse:' + JSON.parse(atob(base64)))
         return JSON.parse(atob(base64));
     };
 
@@ -29,7 +29,6 @@ function Profile() {
         setUserInfo(null);
     };
 
-    //
     useEffect(() => {
         const checkAuthentication = async () => {
             const accessToken = getCookie("accessToken");
@@ -48,6 +47,7 @@ function Profile() {
                             status: decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
                         });
                     } else {
+                        console.log('logout');
                         logout();
                     }
                 } catch (error) {
@@ -59,39 +59,87 @@ function Profile() {
         checkAuthentication();
     }, []);
 
+    const handlePasswordChange = () => {
+        window.location.href = "/change-password";
+    };
+
     return (
         <>
-            <Navbar />
-            <section>
-                <div className="container animate__animated animate__zoomInDown">
-                    <div className="row">
-                        <div className="col-lg-12 mb-4 mb-sm-5">
-                            <div className="card card-style1 border-0">
-                                <div className="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
-                                    <div className="row align-items-center">
-                                        <div className="col-lg-6 px-xl-10">
-                                            <div className="bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
-                                                {/* <h3 className="h2 text-white mb-0">{userInfo.firstName} {userInfo.lastName}</h3>
-                                                <span className="text-primary">{userInfo.status}</span> */}
+            <Navbar/>
+            <div className="container animate__animated animate__zoomInDown">
+                <div className="main-body">
+                    <div className="row gutters-sm">
+                        {isLoggedIn ? (
+                            <>
+                                <div className="col-md-4 mb-3">
+                                    <div className="card">
+                                        <div className="card-body">
+                                            <div className="d-flex flex-column align-items-center text-center">
+                                                <div className="mt-3">
+                                                    <h4>{userInfo.firstName} {userInfo.lastName}</h4>
+                                                    {userInfo.status === "Admin" ? (
+                                                        <p className="text-danger mb-1">{userInfo.status}</p>
+                                                    ) : (
+                                                        <p className="text-secondary mb-1">{userInfo.status}</p>
+                                                    )}
+                                                    <hr/>
+                                                    <h3>In this page you can edit your profile information.</h3>
+                                                    <h4 className="text-secondary">(If you have any questions, please contact with us.)</h4>
+                                                </div>
                                             </div>
-                                            <ul className="list-unstyled mb-1-9">
-                                                <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Role:</span> {userInfo.status}</li>
-                                                <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Name:</span> {userInfo.firstName}</li>
-                                                <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Surname:</span> {userInfo.lastName}</li>
-                                                <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Email:</span> {userInfo.email}</li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                                <div className="col-md-8">
+                                    <div className="card mb-3">
+                                        <div className="card-body">
+                                            <div className="row">
+                                                <div className="col-sm-3">
+                                                    <h4 className="mb-0" style={{margin: "10px 10px 10px 10px"}}>First Name</h4>
+                                                </div>
+                                                <div className="col-sm-9 text-secondary">
+                                                    {userInfo.firstName}
+                                                </div>
+                                            </div>
+                                            <hr/>
+                                            <div className="row">
+                                                <div className="col-sm-3">
+                                                    <h4 className="mb-0" style={{margin: "10px 10px 10px 10px"}}>Last Name</h4>
+                                                </div>
+                                                <div className="col-sm-9 text-secondary">
+                                                    {userInfo.lastName}
+                                                </div>
+                                            </div>
+                                            <hr/>
+                                            <div className="row">
+                                                <div className="col-sm-3">
+                                                    <h4 className="mb-0" style={{margin: "10px 10px 10px 10px"}}>Email</h4>
+                                                </div>
+                                                <div className="col-sm-9 text-secondary">
+                                                    {userInfo.email}
+                                                </div>
+                                            </div>
+                                            <hr/>
+                                            <div className="row">
+                                                <div className="col-sm-12">
+                                                <Link className="navbak" to='/change-password' style={{margin: "0px 0px 0px 10px"}}>
+                                                    <p>Change Password</p>
+                                                </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
-            </section>
-            <Footer />
+            </div>
+            <Footer/>
         </>
-    )
+    );
 }
 
 export default Profile;
-
