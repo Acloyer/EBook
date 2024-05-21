@@ -15,6 +15,7 @@ import GenreList from './components/genre_list/GenreList';
 import GenreAdd from './components/genre_add/GenreAdd';
 import GenreEdit from './components/genre-edit/GenreEdit';
 import NotFound from './components/not_found_page/NotFound';
+import ChangePassword from './components/change-password/ChangePassword';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path='/genre-add' element={<GenreAdd/>} />
         <Route path='/genre-edit' element={<GenreEdit/>} />
         <Route path='/genre-list' element={<GenreList/>} />
+        <Route path='/change-password' element={<ChangePassword/>} />
       </Routes>
     </BrowserRouter>
   );
