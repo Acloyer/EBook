@@ -83,35 +83,47 @@ function BookList() {
                         </Link>
                     </div>
 
-                    <div className="card">
-                        <DataTable value={books} showGridlines={true} tableStyle={{ minWidth: '50rem' }}>
-                            <Column field="title" header="Title" sortable style={{ width: '10%', height: '50px' }} />
-                            <Column field="author.pseudonym" header="Author" sortable style={{ width: '10%' }} />
-                            <Column field="genre.name" header="Genre" sortable style={{ width: '10%' }} />
-                            <Column field="language.name" header="Language" sortable style={{ width: '10%' }} />
-                            <Column field="pageCount" header="Page Count" sortable style={{ width: '10%' }} />
-                            <Column field="price" header="Price" sortable style={{ width: '10%' }} />
-                            <Column field="quantity" header="Quantity" sortable style={{ width: '10%' }} />
-                            <Column field="soldUnits" header="Sold Units" sortable style={{ width: '10%' }} />
-
-                            <Column header="Actions" body={(rowData) => {
-                                return (
-                                    <div className="book-buttons">
-                                        <ButtonGroup >
-                                            <Button className="btn btn-outline-primary btn-sm">
-                                                <Link to={`/book-edit?id=${rowData.id}`}>
-                                                    <FaPencilAlt />
-                                                </Link>
-                                            </Button>
-                                            <Button className="btn btn-outline-danger btn-sm" onClick={() => handleDeleteBook(rowData.id)}>
-                                                <FaTrash />
-                                            </Button>
-                                        </ButtonGroup>
-                                    </div>
-                                );
-                            }} />
-                        </DataTable>
-                    </div>
+                    <table className="table" style={{ width: `${10000}px` }}>
+                        <thead>
+                            <tr>
+                                <th style={{ fontSize: "20px" }}>Title</th>
+                                <th style={{ fontSize: "20px" }}>Author</th>
+                                <th style={{ fontSize: "20px" }}>Genre</th>
+                                <th style={{ fontSize: "20px" }}>Language</th>
+                                <th style={{ fontSize: "20px" }}>Page Count</th>
+                                <th style={{ fontSize: "20px" }}>Price</th>
+                                <th style={{ fontSize: "20px" }}>Quantity</th>
+                                <th style={{ fontSize: "20px" }}>Sold Units</th>
+                                <th style={{ fontSize: "20px" }}></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {books.map(book => (
+                            <tr key={book.id}>
+                                <td style={{ fontSize: "18px" }}>{book.title}</td>
+                                <td style={{ fontSize: "18px" }}>{book.author.pseudonym}</td>
+                                <td style={{ fontSize: "18px" }}>{book.genre.name}</td>
+                                <td style={{ fontSize: "18px" }}>{book.language.name}</td>
+                                <td style={{ fontSize: "18px" }}>{book.pageCount}</td>
+                                <td style={{ fontSize: "18px" }}>{book.price}</td>
+                                <td style={{ fontSize: "18px" }}>{book.quantity}</td>
+                                <td style={{ fontSize: "18px" }}>{book.soldUnits}</td>
+                                <td style={{ textAlign: "right", fontSize: "18px" }}>
+                                    <ButtonGroup>
+                                        <Button className="btn btn-outline-primary">
+                                            <Link to={`/book-edit?id=${book.id}`}>
+                                                <FaPencilAlt />
+                                            </Link>
+                                        </Button>
+                                        <Button className="btn btn-outline-danger" onClick={() => handleDeleteBook(book.id)}>
+                                            <FaTrash />
+                                        </Button>
+                                    </ButtonGroup>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
                     <nav className="d-flex justify-content-center">
                         <ul className="pagination">
                             <li className={`page-item ${!hasPrevious && 'disabled'}`}>
