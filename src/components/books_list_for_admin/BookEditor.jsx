@@ -6,11 +6,11 @@ import Navbar from "../navbar/Navbar";
 import config from "../../config";
 
 function BookEditor() {
-    const location = useLocation();
     const [book, setBook] = useState({ name: "" });
+    const [languages, setLanguages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const location = useLocation();
     const bookId = new URLSearchParams(location.search).get("id");
 
     useEffect(() => {
@@ -18,6 +18,7 @@ function BookEditor() {
             try {
                 const response = await axios.get(`${config.backApi}/books/${bookId}`);
                 setBook(response.data);
+                fetchImage(response.data.posterUrl);
                 setLoading(false);
             } catch (error) {
                 setError("Error fetching book data");
@@ -25,7 +26,17 @@ function BookEditor() {
             }
         };
 
+        const fetchLanguages = async () => {
+            try {
+                const response = await axios.get("http://localhost:6060/api/v1/languages");
+                setLanguages(response.data);
+            } catch (error) {
+                setError("Error fetching languages data");
+            }
+        };
+
         fetchBook();
+        fetchLanguages();
     }, [bookId]);
 
     const handleChange = (event) => {
@@ -33,6 +44,14 @@ function BookEditor() {
         setBook((prevBook) => ({
             ...prevBook,
             [name]: value
+        }));
+    };
+
+    const handleLanguageChange = (event) => {
+        const selectedLanguageId = event.target.value;
+        setBook((prevBook) => ({
+            ...prevBook,
+            languageId: selectedLanguageId
         }));
     };
 
@@ -46,7 +65,6 @@ function BookEditor() {
         event.preventDefault();
         try {
             const accessToken = getCookie("accessToken");
-            console.log(book);
             await axios.put(`${config.backApi}/books/${bookId}`, book, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -84,7 +102,7 @@ function BookEditor() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Description</label>
+                        <label htmlFor="description">Description</label>
                         <input
                             type="text"
                             className="form-control"
@@ -95,7 +113,7 @@ function BookEditor() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Page Count</label>
+                        <label htmlFor="pageCount">Page Count</label>
                         <input
                             type="text"
                             className="form-control"
@@ -106,7 +124,7 @@ function BookEditor() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Price</label>
+                        <label htmlFor="price">Price</label>
                         <input
                             type="text"
                             className="form-control"
@@ -117,12 +135,25 @@ function BookEditor() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Language id</label>
-                        {/* сделать лист где можно выбрать language.
-                        при выборе language идет book.languageId ->  language.id*/}
+                        <label htmlFor="language">Language</label>
+                        <select
+                            className="form-control"
+                            id="language"
+                            name="languageId"
+                            value={book.languageId || ''}
+                            onChange={handleLanguageChange}
+                            style={{height: "50px"}}
+                        >
+                            <option value="" disabled>Select a language</option>
+                            {languages.map((language) => (
+                                <option key={language.id} value={language.id}>
+                                    {language.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Quantity</label>
+                        <label htmlFor="quantity">Quantity</label>
                         <input
                             type="text"
                             className="form-control"
@@ -133,7 +164,7 @@ function BookEditor() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Poster</label>
+                        <label htmlFor="poster">Poster</label>
                         {/* сделать выбор картинки */}
                     </div>
                     <button type="submit" className="btn btn-primary">
