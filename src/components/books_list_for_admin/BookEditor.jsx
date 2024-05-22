@@ -6,6 +6,7 @@ import Navbar from "../navbar/Navbar";
 import config from "../../config";
 
 function BookEditor() {
+    const [imageSrc, setImageSrc] = useState('');
     const [book, setBook] = useState({ name: "" });
     const [languages, setLanguages] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,6 +24,20 @@ function BookEditor() {
             } catch (error) {
                 setError("Error fetching book data");
                 setLoading(false);
+            }
+        };
+
+        const fetchImage = async (url) => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const blob = await response.blob();
+                const imageUrl1 = URL.createObjectURL(blob);
+                setImageSrc(imageUrl1);
+            } catch (error) {
+                console.error('Error fetching the image:', error);
             }
         };
 
@@ -165,7 +180,11 @@ function BookEditor() {
                     </div>
                     <div className="form-group">
                         <label htmlFor="poster">Poster</label>
-                        {/* сделать выбор картинки */}
+                        {imageSrc ? (
+                            <img src={imageSrc} alt="Fetched content" />
+                        ) : (
+                            <p>Loading...</p>
+                        )}
                     </div>
                     <button type="submit" className="btn btn-primary">
                         Save Changes
